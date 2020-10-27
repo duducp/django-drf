@@ -42,3 +42,7 @@ migration-empty:  ## creates blank migration file
 
 migration-detect:  ## detect missing migrations
 	python manage.py makemigrations --dry-run --noinput | grep 'No changes detected' -q || (echo 'Missing migration detected!' && exit 1)
+
+shell:
+	@echo 'Loading shell with settings = $(settings)'
+	python manage.py shell -i ipython
