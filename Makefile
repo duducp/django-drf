@@ -89,3 +89,42 @@ safety-check: ## checks libraries safety
 	safety check -r requirements/production.txt
 	safety check -r requirements/development.txt
 	safety check -r requirements/test.txt
+
+changelog-feature:  ## signifying a new feature
+	@echo $(message) > changelog/$(filename).feature
+
+changelog-bugfix:  ## signifying a bug fix
+	@echo $(message) > changelog/$(filename).bugfix
+
+changelog-doc:  ## signifying a documentation improvement
+	@echo $(message) > changelog/$(filename).doc
+
+changelog-removal:  ## signifying a deprecation or removal of public API
+	@echo $(message) > changelog/$(filename).removal
+
+changelog-misc:  ## a ticket has been closed, but it is not of interest to users
+	@echo $(message) > changelog/$(filename).misc
+
+release-draft: ## show new release changelog
+	towncrier --draft
+
+release-patch: ## create patch release (0.0.1)
+	bumpversion patch --dry-run --no-tag --no-commit --list | grep new_version= | sed -e 's/new_version=//' | xargs -n 1 towncrier --yes --version
+	git commit -am 'Update CHANGELOG'
+	bumpversion patch
+	@echo 'To send the changes to the remote server run the make push command'
+
+release-minor: ## create minor release (0.1.0)
+	bumpversion minor --dry-run --no-tag --no-commit --list | grep new_version= | sed -e 's/new_version=//' | xargs -n 1 towncrier --yes --version
+	git commit -am 'Update CHANGELOG'
+	bumpversion minor
+	@echo 'To send the changes to the remote server run the make push command'
+
+release-major: ## create major release (1.0.0)
+	bumpversion major --dry-run --no-tag --no-commit --list | grep new_version= | sed -e 's/new_version=//' | xargs -n 1 towncrier --yes --version
+	git commit -am 'Update CHANGELOG'
+	bumpversion major
+	@echo 'To send the changes to the remote server run the make push command'
+
+push:
+	git push && git push --tags
