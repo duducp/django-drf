@@ -1,5 +1,10 @@
 import os
+import sys
 from distutils.util import strtobool
+
+import structlog as structlog
+
+from marketplace.logging import processors
 
 BASE_DIR = os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,6 +29,11 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+CID_GENERATE = True
+CID_CONCATENATE_IDS = True
+CID_HEADER = 'X-Correlation-ID'
+CID_RESPONSE_HEADER = 'X-Correlation-ID'
+
 DEFAULT_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -34,7 +44,7 @@ DEFAULT_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-
+    'cid.apps.CidAppConfig',
 ]
 
 LOCAL_APPS = [
@@ -51,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'cid.middleware.CidMiddleware',
 ]
 
 TEMPLATES = [
@@ -99,3 +110,64 @@ AUTH_PASSWORD_VALIDATORS = [
         )
     },
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'ignore_if_contains': {
+            '()': 'marketplace.logging.filters.IgnoreIfContains',
+            'substrings': ['/healthcheck', '/ping'],
+        },
+    },
+    'formatters': {
+        'json': {
+            '()': structlog.stdlib.ProcessorFormatter,
+            'processor': structlog.processors.JSONRenderer(),
+        },
+    },
+    'handlers': {
+        'stdout': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'json',
+            'filters': ['ignore_if_contains'],
+            'stream': sys.stdout,
+        },
+    },
+    'loggers': {
+        'marketplace': {
+            'handlers': ['stdout'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.db.backends': {
+            'handlers': ['stdout'],
+            'level': 'DEBUG'
+        }
+    }
+}
+
+structlog.configure(
+    processors=[
+        processors.hostname,
+        processors.version,
+        processors.correlation,
+        structlog.stdlib.filter_by_level,
+        structlog.processors.TimeStamper(fmt='iso'),
+        structlog.stdlib.add_logger_name,
+        structlog.stdlib.add_log_level,
+        structlog.stdlib.PositionalArgumentsFormatter(),
+        structlog.processors.StackInfoRenderer(),
+        structlog.processors.format_exc_info,
+        structlog.processors.UnicodeDecoder(),
+        structlog.processors.ExceptionPrettyPrinter(),
+        structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
+    ],
+    context_class=structlog.threadlocal.wrap_dict(dict),
+    logger_factory=structlog.stdlib.LoggerFactory(),
+    wrapper_class=structlog.stdlib.BoundLogger,
+    cache_logger_on_first_use=True,
+)
