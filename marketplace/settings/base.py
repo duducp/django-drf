@@ -2,8 +2,9 @@ import os
 import sys
 from distutils.util import strtobool
 
-import structlog as structlog
 from django.urls import reverse_lazy
+
+import structlog as structlog
 
 from marketplace.logging import processors
 

@@ -37,8 +37,8 @@ app:  ## creates a new django application Ex.: make app name=products
 	rm $(path_project)/$(name)/tests.py
 
 
-run:  ## run the django project
-	python manage.py runserver 0.0.0.0:8000
+run: collectstatic  ## run the django project
+	gunicorn -b 0.0.0.0:8000 -t 300 marketplace.wsgi:application --reload
 
 migrate:  ## apply migrations to the database
 	python manage.py migrate
