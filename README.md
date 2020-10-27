@@ -27,3 +27,9 @@ Finally run the command to install the development dependencies:
 ```shell script
 make dependencies
 ```
+
+To access the admin it is necessary to create the static files and the super user. This can be done with the following commands:
+
+```shell script
+make collectstatic
+make superuser

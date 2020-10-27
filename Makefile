@@ -10,6 +10,15 @@ endif
 export DJANGO_SETTINGS_MODULE=$(settings)
 
 
+clean: ## clean local environment
+	@find . -name "*.pyc" | xargs rm -rf
+	@find . -name "*.pyo" | xargs rm -rf
+	@find . -name "__pycache__" -type d | xargs rm -rf
+	@rm -f .coverage
+	@rm -rf htmlcov/
+	@rm -f coverage.xml
+	@rm -f *.log
+
 dependencies: ## install development dependencies
 	pip install -U -r requirements/development.txt
 
@@ -46,3 +55,21 @@ migration-detect:  ## detect missing migrations
 shell:
 	@echo 'Loading shell with settings = $(settings)'
 	python manage.py shell -i ipython
+
+test: clean ## run tests
+	pytest -x
+
+test-matching: clean ## run matching tests
+	pytest -x -k $(q) --pdb
+
+test-debug: clean ## run tests with pdb
+	pytest -x --pdb
+
+test-coverage: clean ## run tests with coverage
+	pytest -x --cov=ecommerce/ --cov-report=term-missing --cov-report=xml
+
+test-coverage-html: clean ## run tests with coverage with html report
+	pytest -x --cov=ecommerce/ --cov-report=html:htmlcov
+
+test-coverage-html-server: ## run server for view coverage tests
+	cd htmlcov && python -m http.server 8001 --bind 0.0.0.0
