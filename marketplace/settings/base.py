@@ -3,6 +3,7 @@ import sys
 from distutils.util import strtobool
 
 import structlog as structlog
+from django.urls import reverse_lazy
 
 from marketplace.logging import processors
 
@@ -34,6 +35,13 @@ CID_CONCATENATE_IDS = True
 CID_HEADER = 'X-Correlation-ID'
 CID_RESPONSE_HEADER = 'X-Correlation-ID'
 
+LOGIN_URL = reverse_lazy('admin:login')
+LOGOUT_URL = reverse_lazy('admin:logout')
+
+SESSION_EXPIRE_SECONDS = int(os.getenv('SESSION_EXPIRE_SECONDS', '3600'))
+SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+SESSION_TIMEOUT_REDIRECT = 'login/'
+
 DEFAULT_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -62,6 +70,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'cid.middleware.CidMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django_session_timeout.middleware.SessionTimeoutMiddleware',
 ]
 
 TEMPLATES = [
@@ -96,18 +106,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': (
-            'django.contrib.auth.password_validation.MinimumLengthValidator',
-        )
+            'django.contrib.auth.password_validation.MinimumLengthValidator'
+        ),
     },
     {
         'NAME': (
-            'django.contrib.auth.password_validation.CommonPasswordValidator',
-        )
+            'django.contrib.auth.password_validation.CommonPasswordValidator'
+        ),
     },
     {
         'NAME': (
-            'django.contrib.auth.password_validation.NumericPasswordValidator',
-        )
+            'django.contrib.auth.password_validation.NumericPasswordValidator'
+        ),
     },
 ]
 
