@@ -73,3 +73,19 @@ test-coverage-html: clean ## run tests with coverage with html report
 
 test-coverage-html-server: ## run server for view coverage tests
 	cd htmlcov && python -m http.server 8001 --bind 0.0.0.0
+
+lint: ## run code lint
+	isort .
+	sort-requirements requirements/base.txt
+	sort-requirements requirements/production.txt
+	sort-requirements requirements/development.txt
+	sort-requirements requirements/test.txt
+	flake8 --show-source .
+	pycodestyle --show-source .
+	mypy marketplace/
+
+safety-check: ## checks libraries safety
+	safety check -r requirements/base.txt
+	safety check -r requirements/production.txt
+	safety check -r requirements/development.txt
+	safety check -r requirements/test.txt
