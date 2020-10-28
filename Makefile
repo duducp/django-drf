@@ -37,6 +37,28 @@ app:  ## creates a new django application Ex.: make app name=products
 	rm $(path_project)/$(name)/tests.py
 
 
+docker-run:
+	docker-compose -f docker-compose.yml up -d --build
+
+docker-down:
+	docker-compose -f docker-compose.yml down -v
+
+docker-migrate:
+	docker-compose -f docker-compose.yml exec web python manage.py migrate --noinput
+
+docker-flush:
+	docker-compose -f docker-compose.yml exec web python manage.py flush --noinput
+
+docker-superuser:
+	docker-compose -f docker-compose.yml exec web python manage.py createsuperuser
+
+docker-shell:
+	docker-compose -f docker-compose.yml exec web python manage.py shell -i ipython
+
+docker-logs:
+	docker-compose -f docker-compose.yml logs
+
+
 run: collectstatic  ## run the django project
 	gunicorn -b 0.0.0.0:8000 -t 300 marketplace.wsgi:application --reload
 

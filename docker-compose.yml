@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  web:
+    restart: always
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: gunicorn -b 0.0.0.0:8000 marketplace.wsgi:application
+    container_name: marketplace
+    volumes:
+      - ./:/usr/src/app/
+    ports:
+      - 8000:8000
+    environment:
+      - SECRET_KEY=foo
+      - DJANGO_ALLOWED_HOSTS=localhost;127.0.0.1;[::1]
+      - SIMPLE_SETTINGS=marketplace.settings.prod
+      - DJANGO_SETTINGS_MODULE=marketplace.settings.prod
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
+    depends_on:
+      - db
+  db:
+    restart: always
+    image: postgres:latest
+    container_name: marketplace-db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+
+volumes:
+  postgres_data:
