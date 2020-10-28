@@ -4,6 +4,7 @@ from distutils.util import strtobool
 
 from django.urls import reverse_lazy
 
+import dj_database_url
 import structlog as structlog
 
 from marketplace.logging import processors
@@ -18,6 +19,9 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(';')
 WSGI_APPLICATION = 'marketplace.wsgi.application'
 ROOT_URLCONF = 'marketplace.urls'
 
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'marketplace', 'static'),
 ]
@@ -91,10 +95,11 @@ TEMPLATES = [
     },
 ]
 
+DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3')
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': dj_database_url.parse(DATABASE_URL),
     }
 }
 
