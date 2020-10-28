@@ -1,5 +1,5 @@
 path_project=./marketplace
-settings=marketplace.settings.development
+settings=marketplace.settings.dev
 
 ifdef SIMPLE_SETTINGS
 	settings=$(SIMPLE_SETTINGS)
@@ -20,7 +20,7 @@ clean: ## clean local environment
 	@rm -f *.log
 
 dependencies: ## install development dependencies
-	pip install -U -r requirements/development.txt
+	pip install -U -r requirements/dev.txt
 
 superuser: ## creates superuser for admin
 	python manage.py createsuperuser
@@ -77,8 +77,8 @@ test-coverage-html-server: ## run server for view coverage tests
 lint: ## run code lint
 	isort .
 	sort-requirements requirements/base.txt
-	sort-requirements requirements/production.txt
-	sort-requirements requirements/development.txt
+	sort-requirements requirements/prod.txt
+	sort-requirements requirements/dev.txt
 	sort-requirements requirements/test.txt
 	flake8 --show-source .
 	pycodestyle --show-source .
@@ -86,8 +86,8 @@ lint: ## run code lint
 
 safety-check: ## checks libraries safety
 	safety check -r requirements/base.txt
-	safety check -r requirements/production.txt
-	safety check -r requirements/development.txt
+	safety check -r requirements/prod.txt
+	safety check -r requirements/dev.txt
 	safety check -r requirements/test.txt
 
 changelog-feature:  ## signifying a new feature

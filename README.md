@@ -6,8 +6,8 @@ Project created with **Django** using the command `django-admin startproject mar
 
 To deploy to production the following environment variables must be defined:
 ```shell script
-export SIMPLE_SETTINGS=marketplace.settings.production
-export DJANGO_SETTINGS_MODULE=marketplace.settings.production
+export SIMPLE_SETTINGS=marketplace.settings.prod
+export DJANGO_SETTINGS_MODULE=marketplace.settings.prod
 export SECRET_KEY=MY_SECRET_KEY
 ```
 
