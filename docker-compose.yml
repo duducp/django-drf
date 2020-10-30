@@ -6,7 +6,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    command: gunicorn -b 0.0.0.0:8000 marketplace.wsgi:application
+    command: gunicorn marketplace.asgi:application -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000
     container_name: marketplace
     volumes:
       - ./:/usr/src/app/
@@ -15,8 +15,8 @@ services:
     environment:
       - SECRET_KEY=foo
       - DJANGO_ALLOWED_HOSTS=localhost;127.0.0.1;[::1]
-      - SIMPLE_SETTINGS=marketplace.settings.prod
-      - DJANGO_SETTINGS_MODULE=marketplace.settings.prod
+      - SIMPLE_SETTINGS=marketplace.settings.production
+      - DJANGO_SETTINGS_MODULE=marketplace.settings.production
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
     depends_on:
       - db

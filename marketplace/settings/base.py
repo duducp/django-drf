@@ -20,7 +20,7 @@ WSGI_APPLICATION = 'marketplace.wsgi.application'
 ROOT_URLCONF = 'marketplace.urls'
 
 LOCALE_PATHS = [
-    os.path.join(BASE_DIR, 'locale'),
+    os.path.join(BASE_DIR, 'marketplace', 'locale'),
 ]
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'marketplace', 'static'),

@@ -1,5 +1,5 @@
 path_project=./marketplace
-settings=marketplace.settings.dev
+settings=marketplace.settings.development
 
 ifdef SIMPLE_SETTINGS
 	settings=$(SIMPLE_SETTINGS)
@@ -26,7 +26,7 @@ superuser: ## creates superuser for admin
 	python manage.py createsuperuser
 
 collectstatic: ## creates static files for admin
-	python manage.py collectstatic
+	python manage.py collectstatic --clear --noinput
 
 app:  ## creates a new django application Ex.: make app name=products
 	cd $(path_project) && python ../manage.py startapp $(name)
@@ -60,7 +60,7 @@ docker-logs:
 
 
 run: collectstatic  ## run the django project
-	gunicorn -b 0.0.0.0:8000 -t 300 marketplace.wsgi:application --reload
+	gunicorn -b 0.0.0.0:8000 -t 300 marketplace.asgi:application -k uvicorn.workers.UvicornWorker --reload
 
 migrate:  ## apply migrations to the database
 	python manage.py migrate

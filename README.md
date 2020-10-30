@@ -30,8 +30,8 @@ make superuser
 
 To deploy to production the following environment variables must be defined:
 ```shell script
-export SIMPLE_SETTINGS=marketplace.settings.prod
-export DJANGO_SETTINGS_MODULE=marketplace.settings.prod
+export SIMPLE_SETTINGS=marketplace.settings.production
+export DJANGO_SETTINGS_MODULE=marketplace.settings.production
 export SECRET_KEY="your_key_here"
 export DATABASE_URL="sqlite:///db.sqlite3"
 ```
@@ -55,8 +55,8 @@ The next step is to send your project to Heroku with the command
 Now it's time to set the environment variables in Heroku:
 ```shell script
 heroku config:set DEBUG="False"
-heroku config:set SIMPLE_SETTINGS=marketplace.settings.prod
-heroku config:set DJANGO_SETTINGS_MODULE=marketplace.settings.prod
+heroku config:set SIMPLE_SETTINGS=marketplace.settings.production
+heroku config:set DJANGO_SETTINGS_MODULE=marketplace.settings.production
 heroku config:set SECRET_KEY="your_key_here"
 ```
 
@@ -82,12 +82,12 @@ The first command we are accessing Heroku's bash and the second we are using to
 create the super user.
 
 Others commands:
-- **heroku config** view the application's environment variables
-- **heroku logs** view the latest application logs
+- **heroku config** view application environment variables
+- **heroku logs --tail** view application logs
 - **heroku addons** view installed addons
 - **heroku addons:open <name_addon>** opens the panel for a particular addon
-- **heroku pg:psql** open the postgres shell
-- **heroku redis:cli** open the redis shell
+- **heroku pg:psql** open postgres shell
+- **heroku redis:cli** open redis shell
 
 Note:
 
