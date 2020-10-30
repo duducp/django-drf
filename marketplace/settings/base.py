@@ -58,6 +58,8 @@ DEFAULT_APPS = [
 
 THIRD_PARTY_APPS = [
     'cid.apps.CidAppConfig',
+    'rest_framework',
+    'django_filters',
 ]
 
 LOCAL_APPS = [
@@ -133,6 +135,39 @@ AUTH_PASSWORD_VALIDATORS = [
         ),
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_VERSION': 'v1',
+    'ALLOWED_VERSIONS': ['v1'],
+    'DEFAULT_VERSIONING_CLASS': (
+        'rest_framework.versioning.NamespaceVersioning'
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework_xml.renderers.XMLRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework_xml.parsers.XMLParser',
+    ],
+    'EXCEPTION_HANDLER': 'marketplace.exceptions.custom_exception_handler',
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+        'rest_framework_filters.backends.RestFrameworkFilterBackend'
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',  # noqa
+    'PAGE_SIZE': 20,
+}
 
 LOGGING = {
     'version': 1,

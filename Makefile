@@ -32,9 +32,14 @@ app:  ## creates a new django application Ex.: make app name=products
 	cd $(path_project) && python ../manage.py startapp $(name)
 
 	@echo "# Create your exceptions here." > $(path_project)/$(name)/exceptions.py
+	@echo "from rest_framework import routers\n\nrouter = routers.DefaultRouter(trailing_slash=True)\n\nurlpatterns = router.urls\n" > $(path_project)/$(name)/urls.py
+	@echo "from rest_framework.serializers import ModelSerializer\n\n# Create your serializers here." > $(path_project)/$(name)/serializers.py
+
 	cd $(path_project)/$(name) && mkdir -p tests
 	@echo > $(path_project)/$(name)/tests/__init__.py
 	rm $(path_project)/$(name)/tests.py
+
+	@echo 'You should now add application to settings in LOCAL_APPS'
 
 
 docker-run:
