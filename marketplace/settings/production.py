@@ -1,11 +1,5 @@
 from .base import *  # noqa
 
-MIDDLEWARE += [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-]
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 DATABASES['default'] = dj_database_url.parse(
     DATABASE_URL,
     engine='django-postgreconnect',

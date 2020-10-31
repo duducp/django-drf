@@ -65,6 +65,7 @@ docker-logs:
 
 
 run: collectstatic  ## run the django project
+	@echo 'Loading application with settings = $(settings)'
 	gunicorn -b 0.0.0.0:8000 -t 300 marketplace.asgi:application -k uvicorn.workers.UvicornWorker --reload
 
 migrate:  ## apply migrations to the database
@@ -93,10 +94,10 @@ test-debug: clean ## run tests with pdb
 	pytest -x --pdb
 
 test-coverage: clean ## run tests with coverage
-	pytest -x --cov=ecommerce/ --cov-report=term-missing --cov-report=xml
+	pytest -x --cov=marketplace/ --cov-report=term-missing --cov-report=xml
 
 test-coverage-html: clean ## run tests with coverage with html report
-	pytest -x --cov=ecommerce/ --cov-report=html:htmlcov
+	pytest -x --cov=marketplace/ --cov-report=html:htmlcov
 
 test-coverage-html-server: ## run server for view coverage tests
 	cd htmlcov && python -m http.server 8001 --bind 0.0.0.0

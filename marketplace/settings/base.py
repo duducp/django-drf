@@ -15,25 +15,23 @@ BASE_DIR = os.path.dirname(
 SECRET_KEY = os.getenv('SECRET_KEY', 'foo')
 DEBUG = bool(strtobool(os.getenv('DEBUG', 'False')))
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(';')
 WSGI_APPLICATION = 'marketplace.wsgi.application'
 ROOT_URLCONF = 'marketplace.urls'
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(';')
 
-LOCALE_PATHS = [
-    os.path.join(BASE_DIR, 'marketplace', 'locale'),
-]
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'marketplace', 'static'),
-]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'marketplace', 'locale')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'marketplace', 'static')]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
-LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
-USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+USE_I18N = True
+LANGUAGE_CODE = 'en-us'
 
 CID_GENERATE = True
 CID_CONCATENATE_IDS = True
@@ -59,7 +57,9 @@ DEFAULT_APPS = [
 THIRD_PARTY_APPS = [
     'cid.apps.CidAppConfig',
     'rest_framework',
+    'drf_yasg',
     'django_filters',
+    'rest_framework_filters',
 ]
 
 LOCAL_APPS = [
@@ -81,6 +81,7 @@ DEFAULT_MIDDLEWARE = [
 ]
 
 THIRD_PARTY_MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'cid.middleware.CidMiddleware',
     'django_session_timeout.middleware.SessionTimeoutMiddleware',
 ]
@@ -94,7 +95,9 @@ MIDDLEWARE = DEFAULT_MIDDLEWARE + THIRD_PARTY_MIDDLEWARE + LOCAL_MIDDLEWARE
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'marketplace', 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -113,27 +116,10 @@ DATABASES = {
 }
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': (
-            'django.contrib.auth.password_validation.'
-            'UserAttributeSimilarityValidator'
-        ),
-    },
-    {
-        'NAME': (
-            'django.contrib.auth.password_validation.MinimumLengthValidator'
-        ),
-    },
-    {
-        'NAME': (
-            'django.contrib.auth.password_validation.CommonPasswordValidator'
-        ),
-    },
-    {
-        'NAME': (
-            'django.contrib.auth.password_validation.NumericPasswordValidator'
-        ),
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},  # noqa
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},  # noqa
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},  # noqa
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},  # noqa
 ]
 
 REST_FRAMEWORK = {
@@ -168,6 +154,49 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',  # noqa
     'PAGE_SIZE': 20,
 }
+
+APPLICATION = {
+    'name': 'Marketplace',
+    'description': '',
+    'terms_of_service': '',
+    'contact': {
+        'name': 'Carlos Eduardo',
+        'email': 'duducp2013@gmail.com',
+        'url': ''
+    },
+    'doc_public': bool(strtobool(os.getenv('APPLICATION_DOC_PUBLIC', 'True')))
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Basic': {
+            'type': 'basic'
+        },
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
+    'DEFAULT_FIELD_INSPECTORS': [
+        'drf_yasg.inspectors.CamelCaseJSONFilter',
+        'drf_yasg.inspectors.InlineSerializerInspector',
+        'drf_yasg.inspectors.RelatedFieldInspector',
+        'drf_yasg.inspectors.ChoiceFieldInspector',
+        'drf_yasg.inspectors.FileFieldInspector',
+        'drf_yasg.inspectors.DictFieldInspector',
+        'drf_yasg.inspectors.JSONFieldInspector',
+        'drf_yasg.inspectors.HiddenFieldInspector',
+        'drf_yasg.inspectors.RecursiveFieldInspector',
+        'drf_yasg.inspectors.SerializerMethodFieldInspector',
+        'drf_yasg.inspectors.SimpleFieldInspector',
+        'drf_yasg.inspectors.StringDefaultFieldInspector',
+    ],
+    'DOC_EXPANSION': 'list',
+    'USE_SESSION_AUTH': True
+}
+
+DRF_YASG_EXCLUDE_VIEWS = []
 
 LOGGING = {
     'version': 1,
