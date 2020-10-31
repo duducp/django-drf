@@ -21,12 +21,12 @@ ROOT_URLCONF = 'marketplace.urls'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(';')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-LOCALE_PATHS = [os.path.join(BASE_DIR, 'marketplace', 'locale')]
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'marketplace', 'static')]
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'marketplace', 'locales')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'marketplace', 'statics')]
+MEDIA_ROOT = os.path.join(BASE_DIR, 'medias')
+MEDIA_URL = '/medias/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
+STATIC_URL = '/statics/'
 
 TIME_ZONE = 'UTC'
 USE_L10N = True
@@ -65,7 +65,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-
+    'marketplace.apps.clients',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS

@@ -23,6 +23,7 @@ auth_jwt = [
 routers_v1: List = [
     path('docs/', schema_view.with_ui('swagger'), name='schema-swagger-ui'),
     path('auth/', include(auth_jwt)),
+    path('', include('marketplace.apps.clients.urls')),
 ]
 
 urlpatterns = [

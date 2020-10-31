@@ -100,7 +100,7 @@ test-coverage: clean ## run tests with coverage
 test-coverage-html: clean ## run tests with coverage with html report
 	pytest -x --cov=marketplace/ --cov-report=html:htmlcov
 
-test-coverage-html-server: ## run server for view coverage tests
+test-coverage-html-server: test-coverage-html ## run server for view coverage tests
 	cd htmlcov && python -m http.server 8001 --bind 0.0.0.0
 
 lint: ## run code lint
