@@ -1,4 +1,5 @@
 path_project=./marketplace
+path_apps=$(path_project)/apps
 settings=marketplace.settings.development
 
 ifdef SIMPLE_SETTINGS
@@ -29,15 +30,15 @@ collectstatic: ## creates static files for admin
 	python manage.py collectstatic --clear --noinput
 
 app:  ## creates a new django application Ex.: make app name=products
-	cd $(path_project) && python ../manage.py startapp $(name)
+	cd $(path_apps) && python ../../manage.py startapp $(name)
 
-	@echo "# Create your exceptions here." > $(path_project)/$(name)/exceptions.py
-	@echo "from rest_framework import routers\n\nrouter = routers.DefaultRouter(trailing_slash=True)\n\nurlpatterns = router.urls\n" > $(path_project)/$(name)/urls.py
-	@echo "from rest_framework.serializers import ModelSerializer\n\n# Create your serializers here." > $(path_project)/$(name)/serializers.py
+	@echo "# Create your exceptions here." > $(path_apps)/$(name)/exceptions.py
+	@echo "from rest_framework import routers\n\nrouter = routers.DefaultRouter(trailing_slash=True)\n\nurlpatterns = router.urls\n" > $(path_apps)/$(name)/urls.py
+	@echo "from rest_framework.serializers import ModelSerializer\n\n# Create your serializers here." > $(path_apps)/$(name)/serializers.py
 
-	cd $(path_project)/$(name) && mkdir -p tests
-	@echo > $(path_project)/$(name)/tests/__init__.py
-	rm $(path_project)/$(name)/tests.py
+	cd $(path_apps)/$(name) && mkdir -p tests
+	@echo > $(path_apps)/$(name)/tests/__init__.py
+	rm $(path_apps)/$(name)/tests.py
 
 	@echo 'You should now add application to settings in LOCAL_APPS'
 
