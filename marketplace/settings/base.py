@@ -285,3 +285,19 @@ structlog.configure(
     wrapper_class=structlog.stdlib.BoundLogger,
     cache_logger_on_first_use=True,
 )
+
+EXTENSIONS_CONFIG = {
+    'challenge': {
+        'timeout': float(os.getenv(
+            'CHALLENGE_TIMEOUT', '2'
+        )),
+        'host': os.getenv(
+            'CHALLENGE_HOST', 'http://localhost'
+        ),
+        'routes': {
+            'product': os.getenv(
+                'CHALLENGE_ROUTE_PRODUCT', '/api/product/{product_id}/'
+            ),
+        },
+    }
+}

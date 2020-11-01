@@ -6,3 +6,7 @@ DATABASES['default'] = dj_database_url.parse(
     conn_max_age=int(os.environ.get('DATABASES_CONN_MAX_AGE', '600')),
     ssl_require=True
 )
+
+EXTENSIONS_CONFIG['challenge']['host'] = os.getenv(
+    'CHALLENGE_HOST', 'http://challenge-api.luizalabs.com'
+)
