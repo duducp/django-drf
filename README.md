@@ -102,6 +102,10 @@ database, simply run the command `heroku addons:create heroku-redis:hobby-dev`.
 By running the two commands above, Heroku will create two environment variables
 called DATABASE_URL and REDIS_URL.
 
+As an option you can install [Timber Logging](https://elements.heroku.com/addons/timber-logging)
+to access the application logs by running the command
+`heroku addons:create timber-logging:free`.
+
 With the database configured, we can run migrations with the command
 `heroku run make migrate`.
 
@@ -288,6 +292,10 @@ For more information you can consult the [official documentation](https://www.dj
 This application makes use of Docker to facilitate during development and if
 necessary for production.
 
+If you are running the `make docker-run` command for the first time, you must
+create the superuser with the `make docker-createsuperuser` command to access
+the admin.
+
 Before executing the commands, make sure you have the docker installed on your
 device.
 
@@ -299,6 +307,7 @@ See the commands available in the Makefile:
 - **docker-shell**: Will grant you access to the Django shell.
 - **docker-logs**: Will show the docker container logs.
 - **docker-down**: Will remove all containers and networks from the docker for the project.
+- **docker-downclear**: Will remove all containers, networks and volumes from the docker for the project.
 
 <a id="images"></a>
 ## Images

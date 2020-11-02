@@ -18,6 +18,3 @@ RUN pip install -r prod.txt
 
 # copy project
 COPY . .
-
-# collect files
-RUN python manage.py collectstatic --clear --noinput
