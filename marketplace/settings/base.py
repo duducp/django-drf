@@ -182,8 +182,6 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
     ),
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
@@ -249,10 +247,10 @@ APPLICATION = {
 }
 
 SWAGGER_SETTINGS = {
+    # If activate USE_SESSION_AUTH you have to add SessionAuthentication
+    # authentication in DEFAULT_AUTHENTICATION_CLASSES of the DRF
+    'USE_SESSION_AUTH': False,
     'SECURITY_DEFINITIONS': {
-        'Basic': {
-            'type': 'basic'
-        },
         'Bearer': {
             'type': 'apiKey',
             'name': 'Authorization',
@@ -274,7 +272,6 @@ SWAGGER_SETTINGS = {
         'drf_yasg.inspectors.StringDefaultFieldInspector',
     ],
     'DOC_EXPANSION': 'list',
-    'USE_SESSION_AUTH': True
 }
 
 DRF_YASG_EXCLUDE_VIEWS = []
