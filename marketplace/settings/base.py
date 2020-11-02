@@ -112,9 +112,46 @@ TEMPLATES = [
     },
 ]
 
-DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3')
+DATABASE_URL = os.environ.get(
+    'DATABASE_URL',
+    'postgres://postgres:postgres@127.0.0.1:5432/postgres'
+)
 DATABASES = {
-    'default': dj_database_url.parse(DATABASE_URL),
+    'default': dj_database_url.parse(
+        DATABASE_URL,
+        engine='django-postgreconnect',
+        conn_max_age=int(
+            os.environ.get('DATABASE_DEFAULT_CONN_MAX_AGE', '600')
+        ),
+        ssl_require=bool(
+            strtobool(
+                os.getenv('DATABASE_DEFAULT_SSL_REQUIRE', 'True')
+            )
+        )
+    )
+}
+
+REDIS_URL = os.environ.get(
+    'REDIS_URL',
+    'redis://127.0.0.1:6379/1'
+).split(';')
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': REDIS_URL,
+        'KEY_PREFIX': 'django',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'SERIALIZER': 'django_redis.serializers.json.JSONSerializer',
+            'CONNECTION_POOL_KWARGS': {
+                'retry_on_timeout': True
+            }
+        }
+    },
+}
+
+CACHES_TTL = {
+    'product': int(os.environ.get('CACHE_TTL_PRODUCT', '10800'))
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -288,15 +325,12 @@ structlog.configure(
 
 EXTENSIONS_CONFIG = {
     'challenge': {
-        'timeout': float(os.getenv(
-            'CHALLENGE_TIMEOUT', '2'
-        )),
-        'host': os.getenv(
-            'CHALLENGE_HOST', 'http://localhost'
-        ),
+        'timeout': float(os.getenv('CHALLENGE_TIMEOUT', '2')),
+        'host': os.getenv('CHALLENGE_HOST', 'http://localhost'),
         'routes': {
             'product': os.getenv(
-                'CHALLENGE_ROUTE_PRODUCT', '/api/product/{product_id}/'
+                'CHALLENGE_ROUTE_PRODUCT',
+                '/api/product/{product_id}/'
             ),
         },
     }
