@@ -73,6 +73,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     'marketplace.apps.clients',
     'marketplace.apps.favorites',
+    'marketplace.apps.ping',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS

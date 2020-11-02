@@ -14,7 +14,7 @@ Features:
 - Application versioning with changelogs
 - Structured logs
 - Cache and CacheLock configured for Redis
-- Health check
+- Health check and Ping _pong_
 - Unit testing and contract testing
 - Dockerized application
 

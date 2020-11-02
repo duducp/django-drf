@@ -3,8 +3,8 @@ from rest_framework import routers
 from marketplace.apps.clients import views
 
 router = routers.DefaultRouter(trailing_slash=True)
-router.register('clients', views.ClientListView)
-router.register('clients', views.ClientDetailView)
-router.register('clients', views.ClientFavoriteDetailView)
+router.register('', views.ClientListView)
+router.register('', views.ClientDetailView)
+router.register('', views.ClientFavoriteDetailView)
 
 urlpatterns = router.urls

@@ -1,0 +1,1 @@
+Creates app Ping
