@@ -28,6 +28,7 @@ Features:
 - [Application route versioning](#app_route_versioning)
 - [Application code versioning](#app_versioning)
 - [Correlation ID](#correlation_id)
+- [Throttles](#throttles)
 - [Docker](#docker)
 - [Images](#images)
 
@@ -269,6 +270,18 @@ to do the management.
 The correlation is injected into the logs and returned in the header of each
 request. The user can send it in the request header (X-Correlation-ID) or if it
 is not found, the application will automatically generate it.
+
+<a id="throttles"></a>
+### Throttles
+Throttles is one more security that you can configure in the application.
+With it you can limit the number of requests that the API can receive, either
+for seconds, minutes, hours or days, for registered or anonymous users.
+
+By default, the application is configured to limit 50 requests per second for
+anonymous users. This setting is set in the settings in the REST_FRAMEWORK
+section.
+
+For more information you can consult the [official documentation](https://www.django-rest-framework.org/api-guide/throttling/).
 
 <a id="docker"></a>
 ### Docker
