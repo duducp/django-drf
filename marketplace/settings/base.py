@@ -62,6 +62,12 @@ THIRD_PARTY_APPS = [
     'django_filters',
     'rest_framework_filters',
     'rest_framework_simplejwt.token_blacklist',
+    'health_check',
+    'health_check.db',
+    'health_check.cache',
+    'health_check.storage',
+    'health_check.contrib.migrations',
+    'health_check.contrib.psutil',
 ]
 
 LOCAL_APPS = [
@@ -117,6 +123,7 @@ DATABASE_URL = os.environ.get(
     'DATABASE_URL',
     'postgres://postgres:postgres@127.0.0.1:5432/postgres'
 )
+
 DATABASES = {
     'default': dj_database_url.parse(
         DATABASE_URL,
@@ -136,6 +143,7 @@ REDIS_URL = os.environ.get(
     'REDIS_URL',
     'redis://127.0.0.1:6379/1'
 ).split(';')
+
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
@@ -262,6 +270,15 @@ SWAGGER_SETTINGS = {
 }
 
 DRF_YASG_EXCLUDE_VIEWS = []
+
+HEALTH_CHECK = {
+    'DISK_USAGE_MAX': int(
+        os.getenv('HEALTH_CHECK_DISK_USAGE_MAX', '90')
+    ),  # percent
+    'MEMORY_MIN': int(
+        os.getenv('HEALTH_CHECK_MEMORY_MIN', '100')
+    ),  # in MB
+}
 
 LOGGING = {
     'version': 1,

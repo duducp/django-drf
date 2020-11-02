@@ -28,6 +28,7 @@ routers_v1: List = [
 ]
 
 urlpatterns = [
+    path('healthcheck/', include('health_check.urls')),
     path('v1/', include((routers_v1, 'v1'), namespace='v1')),
     path('admin/', admin.site.urls),
 ]
