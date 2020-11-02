@@ -21,14 +21,14 @@ auth_jwt = [
 ]
 
 routers_v1: List = [
-    path('docs/', schema_view.with_ui('swagger'), name='schema-swagger-ui'),
+    path('docs/', schema_view.with_ui('swagger'), name='schema_swagger_ui'),
     path('auth/', include(auth_jwt)),
     path('', include('marketplace.apps.clients.urls')),
     path('', include('marketplace.apps.favorites.urls')),
 ]
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('healthcheck/', include('health_check.urls')),
     path('v1/', include((routers_v1, 'v1'), namespace='v1')),
-    path('admin/', admin.site.urls),
 ]

@@ -6,7 +6,7 @@ from simple_settings import settings
 schema_view = get_schema_view(
     openapi.Info(
         title=settings.APPLICATION['name'],
-        default_version='v1',
+        default_version=settings.REST_FRAMEWORK['DEFAULT_VERSION'],
         description="""
         To make a request on a protected route, you must inform the header **Authorization** with the obtained token. Ex.: `Authorization: Bearer TOKEN`.
 
@@ -21,5 +21,7 @@ schema_view = get_schema_view(
         ),
     ),
     public=settings.APPLICATION['doc_public'],
-    permission_classes=(permissions.AllowAny,),
+    permission_classes=(
+        permissions.AllowAny,
+    ),
 )
