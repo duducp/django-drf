@@ -59,9 +59,9 @@ class TestGetProduct:
 
         mock_logger.error.assert_called_once_with(
             'Product API returned product id not found',
-            product_id=product_id,
             error_message=''
         )
+        mock_logger.bind(product_id=product_id)
 
     def test_should_validate_return_when_function_throws_a_client_exception(
         self,

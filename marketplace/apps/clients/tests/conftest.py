@@ -3,7 +3,7 @@ from model_bakery import baker
 
 
 @pytest.fixture()
-def client():
+def client_model():
     model = baker.make(
         'clients.Client',
         name='Carlos Eduardo',

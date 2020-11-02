@@ -41,3 +41,11 @@ class FavoriteCreateSerializer(ModelSerializer):
         model = Favorite
         fields = ('id', 'client_id', 'product_id', 'created_at', 'updated_at')
         read_only_fields = ['id']
+
+
+class FavoriteDetailSerializer(ModelSerializer):
+    product = ProductSerializer(read_only=True)
+
+    class Meta:
+        model = Favorite
+        fields = ['id', 'client_id', 'product_id', 'product']

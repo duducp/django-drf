@@ -34,41 +34,55 @@ class ProductBackend(ProductAbstractBackend):
     def _get_serializer(data, many=False):
         return ProductSerializer(data=data, many=many)
 
-    def _get_data_cache(self, key: str, product_id: str) -> Optional[Product]:
-        cache_data = cache.get(key)
+    @staticmethod
+    def _get_key_cache(product_id: str) -> str:
+        return f'product-{product_id}'
+
+    def _set_data_cache(self, product_id: str, data: dict) -> None:
+        cache.set(
+            key=self._get_key_cache(product_id),
+            value=data,
+            timeout=settings.CACHES_TTL['product']
+        )
+
+    def _get_data_cache(self, product_id: str) -> Optional[Product]:
+        cache_key = self._get_key_cache(product_id)
+        cache_data = cache.get(cache_key)
         if cache_data:
             serializer = self._get_serializer(data=cache_data)
             validated = serializer.is_valid(
                 raise_exception=False,
                 cache=cache,
-                key_cache=key,
+                key_cache=cache_key,
                 remove_cache=True
             )
             if validated:
-                logger.info(
-                    'Product data returned by cache',
-                    product_data=cache_data,
-                    product_id=product_id
-                )
                 return serializer.from_interface()
 
         return None
 
-    def get_product(self, product_id: str) -> Product:
+    def get_product(
+        self,
+        product_id: str
+    ) -> Product:
         try:
-            cache_key = f'product-{product_id}'
-            cache_data = self._get_data_cache(cache_key, product_id)
+            logger.bind(product_id=product_id)
+
+            cache_data = self._get_data_cache(product_id)
             if cache_data:
+                logger.info(
+                    'Product data returned by cache',
+                    product_data=cache_data,
+                )
                 return cache_data
 
             data = get_product(product_id)
             serializer = self._get_serializer(data)
             serializer.is_valid(raise_exception=True)
 
-            cache.set(
-                key=cache_key,
-                value=serializer.data,
-                timeout=settings.CACHES_TTL['product']
+            self._set_data_cache(
+                data=serializer.data,
+                product_id=product_id
             )
 
             return serializer.from_interface()
@@ -83,7 +97,6 @@ class ProductBackend(ProductAbstractBackend):
         except ChallengeProductNotFoundException as exc:
             logger.error(
                 'Product API returned product id not found',
-                product_id=product_id,
                 error_message=str(exc)
             )
             raise ProductNotFoundException from exc
