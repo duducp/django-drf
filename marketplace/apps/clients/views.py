@@ -1,6 +1,7 @@
 from django.http import Http404
 
 import structlog
+from django_toolkit.concurrent.locks import CacheLock, LockActiveError
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import mixins, status
 from rest_framework.decorators import action
@@ -11,7 +12,8 @@ from rest_framework.viewsets import GenericViewSet
 from marketplace.apps.backends.products.exceptions import ProductException
 from marketplace.apps.clients.exceptions import (
     ClientNotFound,
-    ClientProductFavoritesException
+    ClientProductFavoritesException,
+    ClientProductFavoritesLockException
 )
 from marketplace.apps.clients.models import Client
 from marketplace.apps.clients.serializers import (
@@ -43,23 +45,30 @@ class ClientFavoriteDetailView(GenericViewSet):
     @action(methods=['GET'], detail=True, url_path='favorites')
     def retrieve_favorites(self, request, client_id=None):
         try:
-            logger.info(
-                'Searching for favorite products',
-                client_id=client_id
-            )
+            with CacheLock(
+                key=f'cachelock:retrieve_favorites_{client_id}',
+                cache_alias='concurrent',
+                expire=30,
+            ):
+                logger.info(
+                    'Searching for favorite products',
+                    client_id=client_id
+                )
 
-            queryset = self.get_queryset()
-            serializer = self.get_serializer(queryset, many=True)
-            favorites = get_details_products_favorites(
-                favorites=serializer.data
-            )
+                queryset = self.get_queryset()
+                serializer = self.get_serializer(queryset, many=True)
+                favorites = get_details_products_favorites(
+                    favorites=serializer.data
+                )
 
-            return Response(
-                data=favorites,
-                status=status.HTTP_200_OK
-            )
+                return Response(
+                    data=favorites,
+                    status=status.HTTP_200_OK
+                )
         except ProductException:
             raise ClientProductFavoritesException
+        except LockActiveError:
+            raise ClientProductFavoritesLockException
 
 
 class ClientListView(

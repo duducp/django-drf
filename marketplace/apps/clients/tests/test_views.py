@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 import pytest
+from django_toolkit.concurrent.locks import LockActiveError
 from model_bakery import baker
 
 from marketplace.apps.backends.products.exceptions import ProductException
@@ -417,7 +418,7 @@ class TestClientFavoritesDetailView:
         assert data == favorite_list
         mock_get_details_product.assert_called_once()
 
-    def test_should_validate_return_when_an_error_occurs_when_fetching_product_data(  # noqa
+    def test_should_validate_return_when_an_error_occurs_for_fetching_product_data(  # noqa
         self,
         client_authenticated,
         client_model,
@@ -439,3 +440,38 @@ class TestClientFavoritesDetailView:
             'status_code': 500,
             'code': 'product_internal_error'
         }
+
+    def test_should_validate_return_when_error_occurs_many_requests(
+        self,
+        client_authenticated,
+        client_model,
+        favorite_model,
+        mock_get_details_product,
+        favorite_list,
+    ):
+        with patch(
+            'marketplace.apps.clients.views.CacheLock'
+        ) as mock_cache_lock:
+            mock_cache_lock.side_effect = LockActiveError
+
+            response = client_authenticated.get(
+                path=f'/v1/clients/{str(client_model.id)}/favorites/',
+                format='json'
+            )
+            data = response.json()
+
+        assert response.status_code == 429
+        assert data == {
+            'detail': (
+                'The request has been blocked because there is another request'
+                ' being processed by you'
+            ),
+            'status_code': 429,
+            'code': 'requests_lock'
+        }
+        mock_cache_lock.assert_called_once_with(
+            key=f'cachelock:retrieve_favorites_{str(client_model.id)}',
+            cache_alias='concurrent',
+            expire=30
+        )
+        mock_get_details_product.assert_not_called()

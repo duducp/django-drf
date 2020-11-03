@@ -158,6 +158,17 @@ CACHES = {
             }
         }
     },
+    'concurrent': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': REDIS_URL,
+        'KEY_PREFIX': 'lock',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'CONNECTION_POOL_KWARGS': {
+                'retry_on_timeout': True
+            }
+        }
+    },
 }
 
 CACHES_TTL = {
