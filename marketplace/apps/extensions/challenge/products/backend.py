@@ -51,7 +51,6 @@ class ProductBackend(ProductAbstractBackend):
         if cache_data:
             serializer = self._get_serializer(data=cache_data)
             validated = serializer.is_valid(
-                raise_exception=False,
                 cache=cache,
                 key_cache=cache_key,
                 remove_cache=True

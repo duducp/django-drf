@@ -1,11 +1,14 @@
+import structlog
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from marketplace.apps.backends.products.interfaces import Product
+
+logger = structlog.get_logger(__name__)
 
 
 class ProductSerializer(serializers.Serializer):
     id = serializers.UUIDField(
-        write_only=True,
         allow_null=False,
         required=True
     )
@@ -36,11 +39,21 @@ class ProductSerializer(serializers.Serializer):
         remove_cache=False,
         key_cache=''
     ):
-        validated = super().is_valid(raise_exception)
-        if not validated and cache and remove_cache:
-            cache.delete(key_cache)
+        if cache and remove_cache:
+            raise_exception = True
 
-        return validated
+        try:
+            return super().is_valid(raise_exception)
+        except ValidationError as exc:
+            if cache and remove_cache:
+                logger.info(
+                    'Removing product cache because it was not validated by '
+                    'the serializer',
+                    error_message=str(exc),
+                )
+                cache.delete(key_cache)
+
+            raise
 
     def create(self, validated_data):
         return Product.from_dict(validated_data)
