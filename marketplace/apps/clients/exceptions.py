@@ -19,3 +19,9 @@ class ClientProductFavoritesLockException(APIException):
         'processed by you'
     )
     default_code = 'requests_lock'
+
+
+class ClientProtectedException(APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = 'Cannot delete the client'
+    default_code = 'client_protected'

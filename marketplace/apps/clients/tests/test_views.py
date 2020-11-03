@@ -350,6 +350,27 @@ class TestClientDestroyView:
         assert self.contract.validate(data, self.contract.error_schema)
         assert data['code'] == 'client_not_found'
 
+    def test_should_valid_returned_when_client_is_protected(
+        self,
+        client_authenticated,
+        client_model,
+    ):
+        baker.make(
+            'favorites.Favorite',
+            client=client_model,
+            product_id='eaefc867-10a6-3a5e-947d-43a984964fcf'
+        )
+
+        response = client_authenticated.delete(
+            path=f'/v1/clients/{str(client_model.id)}/',
+            format='json'
+        )
+        data = response.json()
+
+        assert response.status_code == 400
+        assert self.contract.validate(data, self.contract.error_schema)
+        assert data['code'] == 'client_protected'
+
     def test_should_checks_whether_route_is_protected(
         self,
         client_unauthenticated,

@@ -1,3 +1,4 @@
+from django.db.models.deletion import ProtectedError
 from django.http import Http404
 
 import structlog
@@ -13,7 +14,8 @@ from marketplace.apps.backends.products.exceptions import ProductException
 from marketplace.apps.clients.exceptions import (
     ClientNotFound,
     ClientProductFavoritesException,
-    ClientProductFavoritesLockException
+    ClientProductFavoritesLockException,
+    ClientProtectedException
 )
 from marketplace.apps.clients.models import Client
 from marketplace.apps.clients.serializers import (
@@ -248,3 +250,5 @@ class ClientDetailView(
             )
         except Http404:
             raise ClientNotFound
+        except ProtectedError:
+            raise ClientProtectedException
