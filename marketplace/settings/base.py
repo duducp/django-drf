@@ -46,6 +46,15 @@ SESSION_EXPIRE_SECONDS = int(os.getenv('SESSION_EXPIRE_SECONDS', '3600'))
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 SESSION_TIMEOUT_REDIRECT = 'login/'
 
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD = 'myPassword!123'
+EMAIL_HOST_USER = 'myaccount@gsuite.com'
+EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 DEFAULT_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -58,6 +67,7 @@ DEFAULT_APPS = [
 THIRD_PARTY_APPS = [
     'cid.apps.CidAppConfig',
     'rest_framework',
+    'djoser',
     'drf_yasg',
     'django_filters',
     'rest_framework_filters',
@@ -255,6 +265,10 @@ APPLICATION = {
         'url': ''
     },
     'doc_public': bool(strtobool(os.getenv('APPLICATION_DOC_PUBLIC', 'True')))
+}
+
+DJOSER = {
+    # https://djoser.readthedocs.io/en/latest/settings.html
 }
 
 SWAGGER_SETTINGS = {

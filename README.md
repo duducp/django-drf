@@ -5,6 +5,7 @@ Project created with **Django** using the command `django-admin startproject mar
 Main dependencies:
 - Django (framework)
 - djangorestframework (toolkit for building Web APIs)
+- djoser (REST implementation of Django authentication system)
 - drf-yasg (api documentation)
 
 Features:
