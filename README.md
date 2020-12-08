@@ -35,6 +35,8 @@ Features:
 <a id="development_mode"></a>
 ## Development mode
 
+The development mode by default uses sqlite3 as a database.
+
 First, you must configure the virtual environment:
 ```shell script
 python -m venv venv
@@ -45,16 +47,25 @@ After that activate virtualenv:
 source venv/bin/activate
 ```
 
-Finally run the command to install the development dependencies:
+Now, run the command to install the development dependencies:
 ```shell script
 make dependencies
 ```
 
+Now, run the command to create the tables in the database:
+```shell script
+make migrate
+```
+
 To access the admin it is necessary to create the superuser. This can be done
 with the following command:
-
 ```shell script
 make superuser
+```
+
+Finally, we execute the command below to create the static files:
+```shell script
+make collectstatic
 ```
 
 <a id="deploying_prod"></a>
@@ -138,7 +149,7 @@ that Heroku should use.
 
 <a id="create_app"></a>
 ### Create new app
-All new apps are created in the _ecommerce/apps_ directory and to create a new
+All new apps are created in the _marketplace/apps_ directory and to create a new
 app you can run the following command:
 ```shell script
 make app name=clients
