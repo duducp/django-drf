@@ -31,6 +31,7 @@ Features:
 - [Correlation ID](#correlation_id)
 - [Throttles](#throttles)
 - [Docker](#docker)
+- [Project structure](#structure)
 - [Images](#images)
 
 <a id="development_mode"></a>
@@ -320,6 +321,82 @@ See the commands available in the Makefile:
 - **docker-logs**: Will show the docker container logs.
 - **docker-down**: Will remove all containers and networks from the docker for the project.
 - **docker-downclear**: Will remove all containers, networks and volumes from the docker for the project.
+
+<a id="structure"></a>
+## Project structure
+
+```
+.
+└── project
+    ├── manage.py
+    ├── runtime.txt
+    ├── requirements.txt
+    ├── setup.cpf
+    ├── CHANGELOG.md
+    ├── README.md
+    ├── Procfile
+    ├── Makefile
+    ├── Dockerfile
+    ├── docker-compose.yml
+    ├── pyproject.toml
+    ├── towncrier_template.rst
+    ├── nginx.conf
+    ├── .gitignore
+    ├── .dockerignore
+    ├── .editorconfig
+    ├── changelog
+        └── .gitignore
+    ├── medias
+        └── .gitignore
+    ├── requirements
+        ├── __init__.py
+        ├── base.txt
+        ├── dev.txt
+        ├── prod.txt
+        └── test.txt
+    └── marketplace
+        ├── __init__.py
+        ├── apps
+            ├── __init__.py
+            ├── backends
+                 └── __init__.py
+            ├── extensions
+                 └── __init__.py
+            ├── tests
+                 └── __init__.py
+            ├── validators.py
+            ├── models.py
+            ├── contracts.py
+            └── conftest.py
+        ├── middlewares
+            ├── __init__.py
+            └── version_header.py
+        ├── throttles
+            └── __init__.py
+        ├── logging
+            ├── __init__.py
+            ├── filters.py
+            └── processors.py
+        ├── settings
+            ├── __init__.py
+            ├── base.py
+            ├── development.py
+            ├── production.py
+            ├── sandbox.py
+            └── test.py
+        ├── locales
+            └── .gitignore
+        ├── templates
+            └── .gitignore
+        ├── statics
+            └── .gitignore
+        ├── swagger.py
+        ├── exceptions.py
+        ├── urls.py
+        ├── wsgi.py
+        └── asgi.py
+```
+
 
 <a id="images"></a>
 ## Images
