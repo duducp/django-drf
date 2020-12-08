@@ -1,3 +1,18 @@
+1.1.0 (2020-12-07)
+==================
+
+Features
+--------
+
+- Adds support for the djoser module
+
+
+Misc
+----
+
+- Updates the project modules
+
+
 1.0.0 (2020-11-03)
 ==================
 
