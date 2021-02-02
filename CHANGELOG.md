@@ -1,3 +1,18 @@
+1.1.1 (2021-02-02)
+==================
+
+Improved Documentation
+----------------------
+
+- Adds project structure in README
+
+
+Misc
+----
+
+- Updates the python version and dependencies
+
+
 1.1.0 (2020-12-07)
 ==================
 
