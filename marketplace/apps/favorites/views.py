@@ -29,6 +29,7 @@ class FavoriteListView(
 
     @swagger_auto_schema(
         operation_summary='Adds favorite',
+        operation_description='The product ID entered will be consultd in an external API to confirm that it exists. You can see the products available at http://challenge-api.luizalabs.com/api/product/?page=1',  # noqa
         request_body=FavoriteCreateSerializer,
         responses={
             201: FavoriteCreateSerializer(),

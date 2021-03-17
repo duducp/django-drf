@@ -75,6 +75,16 @@ Finally, we execute the command below to create the static files:
 make collectstatic
 ```
 
+To see which routes exist in the application, execute the command:
+```shell script
+make urls
+```
+
+Now just run the command below to run the application:
+```shell script
+make run
+```
+
 <a id="deploying_prod"></a>
 ## Deploying application in production
 

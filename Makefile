@@ -84,9 +84,12 @@ migration-empty:  ## creates blank migration file
 migration-detect:  ## detect missing migrations
 	python manage.py makemigrations --dry-run --noinput | grep 'No changes detected' -q || (echo 'Missing migration detected!' && exit 1)
 
+urls:  ## run the django project
+	python manage.py show_urls
+
 shell:
 	@echo 'Loading shell with settings = $(settings)'
-	python manage.py shell -i ipython
+	python manage.py shell_plus --ipython  # shell -i ipython
 
 test: clean ## run tests
 	pytest -x

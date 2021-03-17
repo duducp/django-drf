@@ -62,6 +62,7 @@ DEFAULT_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
 ]
 
 THIRD_PARTY_APPS = [
@@ -374,7 +375,10 @@ structlog.configure(
 EXTENSIONS_CONFIG = {
     'challenge': {
         'timeout': float(os.getenv('CHALLENGE_TIMEOUT', '2')),
-        'host': os.getenv('CHALLENGE_HOST', 'http://localhost'),
+        'host': os.getenv(
+            'CHALLENGE_HOST',
+            'http://challenge-api.luizalabs.com'
+        ),
         'routes': {
             'product': os.getenv(
                 'CHALLENGE_ROUTE_PRODUCT',
