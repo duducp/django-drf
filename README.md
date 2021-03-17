@@ -19,6 +19,11 @@ Features:
 - Unit testing and contract testing
 - Dockerized application
 
+Compatibility:
+- Python 3.9.2
+- Django 3.1.7
+- RestFramework 3.12.2
+
 # Navigation
 - [Development mode](#ancora1)
 - [Deploying in production](#deploying_prod)
