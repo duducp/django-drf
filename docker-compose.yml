@@ -8,8 +8,6 @@ services:
       sh -c "python manage.py collectstatic --clear --noinput &&
              python manage.py migrate &&
              gunicorn -b 0.0.0.0:8000 marketplace.asgi:application -k uvicorn.workers.UvicornWorker"
-    volumes:
-      - ./:/usr/src/app/
     ports:
       - 8000:8000
     environment:
@@ -21,28 +19,40 @@ services:
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
       - DATABASE_DEFAULT_SSL_REQUIRE=0
       - REDIS_URL=redis://redis:6379/1
+    volumes:
+      - ./:/usr/src/app/
     depends_on:
       - postgres
       - redis
+    networks:
+      - marketplace_network
   postgres:
     restart: always
     image: postgres:latest
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
     ports:
       - 5432:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - marketplace_network
   redis:
     restart: always
     image: redis:latest
-    volumes:
-      - redis_data:/data
     ports:
       - 6379:6379
+    volumes:
+      - redis_data:/data
+    networks:
+      - marketplace_network
 
 volumes:
   postgres_data:
   redis_data:
+
+networks:
+  marketplace_network:
+    driver: bridge

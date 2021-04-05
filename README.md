@@ -26,6 +26,7 @@ Compatibility:
 
 # Navigation
 - [Development mode](#ancora1)
+- [Docker](#docker)
 - [Deploying in production](#deploying_prod)
 - [Deploying on Heroku](#deploying_heroku)
 - [Create new app](#create_app)
@@ -35,7 +36,6 @@ Compatibility:
 - [Application code versioning](#app_versioning)
 - [Correlation ID](#correlation_id)
 - [Throttles](#throttles)
-- [Docker](#docker)
 - [Project structure](#structure)
 - [Images](#images)
 
@@ -84,6 +84,34 @@ Now just run the command below to run the application:
 ```shell script
 make run
 ```
+
+After running the command above, you can access the documentation and the administrative panel:
+```
+http://localhost:8000/v1/docs
+http://localhost:8000/admin
+```
+
+<a id="docker"></a>
+### Docker
+This application makes use of Docker to facilitate during development and if
+necessary for production.
+
+If you are running the `make docker-run` command for the first time, you must
+create the superuser with the `make docker-createsuperuser` command to access
+the admin.
+
+Before executing the commands, make sure you have the docker installed on your
+device.
+
+See the commands available in the Makefile:
+- make **docker-run**: Will create the docker image and run the container.
+- make **docker-migrate**: Will apply the migrations to the database configured in the docker.
+- make **docker-flush**: Will delete all data from the database tables.
+- make **docker-superuser**: Will create the Django super user in the database.
+- make **docker-shell**: Will grant you access to the Django shell.
+- make **docker-logs**: Will show the docker container logs.
+- make **docker-down**: Will remove all containers and networks from the docker for the project.
+- make **docker-downclear**: Will remove all containers, networks and volumes from the docker for the project.
 
 <a id="deploying_prod"></a>
 ## Deploying application in production
@@ -314,28 +342,6 @@ anonymous users. This setting is set in the settings in the REST_FRAMEWORK
 section.
 
 For more information you can consult the [official documentation](https://www.django-rest-framework.org/api-guide/throttling/).
-
-<a id="docker"></a>
-### Docker
-This application makes use of Docker to facilitate during development and if
-necessary for production.
-
-If you are running the `make docker-run` command for the first time, you must
-create the superuser with the `make docker-createsuperuser` command to access
-the admin.
-
-Before executing the commands, make sure you have the docker installed on your
-device.
-
-See the commands available in the Makefile:
-- **docker-run**: Will create the docker image and run the container.
-- **docker-migrate**: Will apply the migrations to the database configured in the docker.
-- **docker-flush**: Will delete all data from the database tables.
-- **docker-createsuperuser**: Will create the Django super user in the database.
-- **docker-shell**: Will grant you access to the Django shell.
-- **docker-logs**: Will show the docker container logs.
-- **docker-down**: Will remove all containers and networks from the docker for the project.
-- **docker-downclear**: Will remove all containers, networks and volumes from the docker for the project.
 
 <a id="structure"></a>
 ## Project structure
