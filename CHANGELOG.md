@@ -1,3 +1,19 @@
+1.1.2 (2021-04-05)
+==================
+
+Features
+--------
+
+- Adds the django-extensions module and makes some adjustments
+
+
+Misc
+----
+
+- Updates Python version and dependencies
+- Update modules version and adjust readme and docker compose
+
+
 1.1.1 (2021-02-02)
 ==================
 
