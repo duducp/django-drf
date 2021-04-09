@@ -13,7 +13,11 @@ from marketplace.logging import processors
 BASE_DIR = os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 )
+
+# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', 'foo')
+
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(strtobool(os.getenv('DEBUG', 'False')))
 
 WSGI_APPLICATION = 'marketplace.wsgi.application'
@@ -28,24 +32,28 @@ MEDIA_URL = '/medias/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/statics/'
 
+LOGIN_URL = reverse_lazy('admin:login')
+LOGOUT_URL = reverse_lazy('admin:logout')
+
+# Django timezones and languages settings (https://docs.djangoproject.com/en/3.2/ref/settings) # noqa
 TIME_ZONE = 'UTC'
 USE_TZ = True
 USE_L10N = True
 USE_I18N = False
 LANGUAGE_CODE = 'en-us'
 
+# Configurations of the django-cid module responsible for generating correlation_id of logs and requests (https://github.com/Polyconseil/django-cid) # noqa
 CID_GENERATE = True
 CID_CONCATENATE_IDS = True
 CID_HEADER = 'X-Correlation-ID'
 CID_RESPONSE_HEADER = 'X-Correlation-ID'
 
-LOGIN_URL = reverse_lazy('admin:login')
-LOGOUT_URL = reverse_lazy('admin:logout')
-
+# Settings for the django-session-timeout module that expires Django Admin sessions (https://github.com/LabD/django-session-timeout) # noqa
 SESSION_EXPIRE_SECONDS = int(os.getenv('SESSION_EXPIRE_SECONDS', '3600'))
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 SESSION_TIMEOUT_REDIRECT = 'login/'
 
+# Django emails settings (https://docs.djangoproject.com/en/3.2/topics/email)
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -55,6 +63,26 @@ EMAIL_HOST_USER = 'myaccount@gsuite.com'
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+# Django templates settings (https://docs.djangoproject.com/en/3.2/topics/templates) # noqa
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, 'marketplace', 'templates'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+# Django apps settings
 DEFAULT_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -81,14 +109,9 @@ THIRD_PARTY_APPS = [
     'health_check.contrib.psutil',
 ]
 
-LOCAL_APPS = [
-    'marketplace.apps.clients',
-    'marketplace.apps.favorites',
-    'marketplace.apps.ping',
-]
+INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS
 
-INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS
-
+# Django middlewares settings
 DEFAULT_MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -113,29 +136,7 @@ LOCAL_MIDDLEWARE = [
 
 MIDDLEWARE = DEFAULT_MIDDLEWARE + THIRD_PARTY_MIDDLEWARE + LOCAL_MIDDLEWARE
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'marketplace', 'templates'),
-        ],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
-
-DATABASE_URL = os.environ.get(
-    'DATABASE_URL',
-    'postgres://postgres:postgres@127.0.0.1:5432/postgres'
-)
-
+# Database django connection settings (https://docs.djangoproject.com/en/3.2/ref/databases) # noqa
 DATABASES = {
     'default': dj_database_url.parse(
         DATABASE_URL,
@@ -151,6 +152,10 @@ DATABASES = {
     )
 }
 
+# Type default for primary key fields (https://docs.djangoproject.com/en/3.2/topics/db/models/#automatic-primary-key-fields) # noqa
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Redis connection settings (https://github.com/jazzband/django-redis)
 REDIS_URL = os.environ.get(
     'REDIS_URL',
     'redis://127.0.0.1:6379/1'
@@ -182,17 +187,7 @@ CACHES = {
     },
 }
 
-CACHES_TTL = {
-    'product': int(os.environ.get('CACHE_TTL_PRODUCT', '10800'))
-}
-
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},  # noqa
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},  # noqa
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},  # noqa
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},  # noqa
-]
-
+# Django Rest Framework settings (https://www.django-rest-framework.org/api-guide/settings) # noqa
 REST_FRAMEWORK = {
     'DEFAULT_VERSION': 'v1',
     'ALLOWED_VERSIONS': ['v1'],
@@ -231,6 +226,9 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20,
 }
 
+# Configurations of the djoser module responsible for authentication django (https://djoser.readthedocs.io/en/latest/settings.html) # noqa
+DJOSER = {}
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
@@ -256,26 +254,17 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
 }
 
-APPLICATION = {
-    'name': 'Marketplace',
-    'description': '',
-    'terms_of_service': '',
-    'contact': {
-        'name': 'Carlos Eduardo',
-        'email': 'duducp2013@gmail.com',
-        'url': ''
-    },
-    'doc_public': bool(strtobool(os.getenv('APPLICATION_DOC_PUBLIC', 'True')))
-}
+# Password validation (https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators) # noqa
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},  # noqa
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},  # noqa
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},  # noqa
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},  # noqa
+]
 
-DJOSER = {
-    # https://djoser.readthedocs.io/en/latest/settings.html
-}
-
+# Configurations of the drf_yasg module responsible for documenting the application routes # noqa
 SWAGGER_SETTINGS = {
-    # If activate USE_SESSION_AUTH you have to add SessionAuthentication
-    # authentication in DEFAULT_AUTHENTICATION_CLASSES of the DRF
-    'USE_SESSION_AUTH': False,
+    'USE_SESSION_AUTH': False,  # If activate USE_SESSION_AUTH you have to add SessionAuthentication authentication in DEFAULT_AUTHENTICATION_CLASSES of the DRF # noqa
     'SECURITY_DEFINITIONS': {
         'Bearer': {
             'type': 'apiKey',
@@ -300,8 +289,24 @@ SWAGGER_SETTINGS = {
     'DOC_EXPANSION': 'list',
 }
 
+APPLICATION = {
+    'name': 'Marketplace',
+    'description': '',
+    'terms_of_service': '',
+    'contact': {
+        'name': 'Carlos Eduardo',
+        'email': 'duducp2013@gmail.com',
+        'url': ''
+    },
+    'doc_public': bool(strtobool(os.getenv('APPLICATION_DOC_PUBLIC', 'True')))
+}
+
+# Variable where you can inform the Views that will not be presented in the Swagger documentation # noqa
+# Ex.: DRF_YASG_EXCLUDE_VIEWS = ['marketplace.apps.clients.views.ClientFavoriteDetailView'] # noqa
 DRF_YASG_EXCLUDE_VIEWS = []
 
+# Configuration of the HealthCheck module (https://django-health-check.readthedocs.io/en/latest) # noqa
+# See the Readme in the Health Check section
 HEALTH_CHECK = {
     'DISK_USAGE_MAX': int(
         os.getenv('HEALTH_CHECK_DISK_USAGE_MAX', '90')
@@ -311,6 +316,8 @@ HEALTH_CHECK = {
     ),  # in MB
 }
 
+# Configuring Django logs (https://docs.djangoproject.com/en/3.2/topics/logging) # noqa
+# See the Readme in the Log section
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -350,6 +357,7 @@ LOGGING = {
     }
 }
 
+# Configuration of the Structlog module that structures the logs in Json (https://www.structlog.org/en/stable) # noqa
 structlog.configure(
     processors=[
         processors.hostname,
@@ -372,16 +380,21 @@ structlog.configure(
     cache_logger_on_first_use=True,
 )
 
+# Custom environment variables to use in the application
 EXTENSIONS_CONFIG = {
     'challenge': {
-        'timeout': float(os.getenv('CHALLENGE_TIMEOUT', '2')),
+        'timeout': float(os.getenv('CHALLENGE_API_TIMEOUT', '2')),
         'host': os.getenv(
-            'CHALLENGE_HOST',
-            'http://challenge-api.luizalabs.com'
+            'CHALLENGE_API_HOST', 'https://challenge-api.luizalabs.com'
         ),
+        'caches': {
+            'product': int(
+                os.environ.get('CHALLENGE_API_CACHE_TTL_PRODUCT', '10800')
+            )
+        },
         'routes': {
             'product': os.getenv(
-                'CHALLENGE_ROUTE_PRODUCT',
+                'CHALLENGE_API_ROUTE_PRODUCT',
                 '/api/product/{product_id}/'
             ),
         },

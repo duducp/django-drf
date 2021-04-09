@@ -20,8 +20,8 @@ Features:
 - Dockerized application
 
 Compatibility:
-- Python 3.9.2
-- Django 3.1.7
+- Python 3.9.4
+- Django 3.2.0
 - RestFramework 3.12.2
 
 # Navigation

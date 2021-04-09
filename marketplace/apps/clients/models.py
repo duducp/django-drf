@@ -25,6 +25,7 @@ class Client(BaseModel):
         return f'{self.name} {self.last_name}'
 
     class Meta:
+        app_label = 'clients'
         verbose_name = 'Client'
         verbose_name_plural = 'Clients'
         ordering = ['-created_at']

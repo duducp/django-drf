@@ -15,6 +15,7 @@ class Favorite(BaseModel):
     )
 
     class Meta:
+        app_label = 'favorites'
         verbose_name = 'Favorite'
         verbose_name_plural = 'Favorites'
         ordering = ['-created_at']
