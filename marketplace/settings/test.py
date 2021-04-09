@@ -1,7 +1,6 @@
 from .base import *  # noqa
 
-DATABASE_URL = 'sqlite://:memory:'
-DATABASES['default'] = dj_database_url.parse(DATABASE_URL)
+DATABASES['default'] = dj_database_url.parse('sqlite://:memory:')
 
 CACHES['default'] = {
     'BACKEND': 'django.core.cache.backends.dummy.DummyCache',

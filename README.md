@@ -42,7 +42,7 @@ Compatibility:
 <a id="development_mode"></a>
 ## Development mode
 
-The development mode by default uses sqlite3 as a database.
+The development mode by default uses sqlite3 as a database and for cache uses LocMemCache.
 
 First, you must configure the virtual environment:
 ```shell script
@@ -63,6 +63,9 @@ Now, run the command to create the tables in the database:
 ```shell script
 make migrate
 ```
+
+Attention: to execute this command you have to have an instance of postgres running.
+To make it easier you can use the `make docker-up` command.
 
 To access the admin it is necessary to create the superuser. This can be done
 with the following command:
@@ -93,23 +96,12 @@ http://localhost:8000/admin
 
 <a id="docker"></a>
 ### Docker
-This application makes use of Docker to facilitate during development and if
-necessary for production.
+This application makes use of Docker to facilitate during development in order to raise external dependencies (Postgres and Redis).
 
-If you are running the `make docker-run` command for the first time, you must
-create the superuser with the `make docker-createsuperuser` command to access
-the admin.
-
-Before executing the commands, make sure you have the docker installed on your
-device.
+Before executing the commands, make sure you have the docker installed on your device.
 
 See the commands available in the Makefile:
-- make **docker-run**: Will create the docker image and run the container.
-- make **docker-migrate**: Will apply the migrations to the database configured in the docker.
-- make **docker-flush**: Will delete all data from the database tables.
-- make **docker-superuser**: Will create the Django super user in the database.
-- make **docker-shell**: Will grant you access to the Django shell.
-- make **docker-logs**: Will show the docker container logs.
+- make **docker-up**: Will create the docker image and run the container.
 - make **docker-down**: Will remove all containers and networks from the docker for the project.
 - make **docker-downclear**: Will remove all containers, networks and volumes from the docker for the project.
 
@@ -311,7 +303,7 @@ command.
 
 ### Logs
 The application logs are more powerful and less painful with the help of
-**structlog** which is intermediated by `django-structlog`. All logs made are
+**structlog** which is intermediated by `structlog`. All logs made are
 converted to JSON, thus facilitating their search, since they are keyed.
 
 For you to use them just follow the code below:

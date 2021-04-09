@@ -10,7 +10,7 @@ class TestClientModel:
     @pytest.fixture
     def client_model(self):
         yield baker.make(
-            Client,
+            'Client',
             name='Carlos Eduardo',
             last_name='Dorneles',
             email='test@email.com'

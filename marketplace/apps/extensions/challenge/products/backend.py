@@ -42,7 +42,7 @@ class ProductBackend(ProductAbstractBackend):
         cache.set(
             key=self._get_key_cache(product_id),
             value=data,
-            timeout=settings.CACHES_TTL['product']
+            timeout=settings.EXTENSIONS_CONFIG['challenge']['caches']['product']  # noqa
         )
 
     def _get_data_cache(self, product_id: str) -> Optional[Product]:
@@ -60,10 +60,7 @@ class ProductBackend(ProductAbstractBackend):
 
         return None
 
-    def get_product(
-        self,
-        product_id: str
-    ) -> Product:
+    def get_product(self, product_id: str) -> Product:
         try:
             logger.bind(product_id=product_id)
 

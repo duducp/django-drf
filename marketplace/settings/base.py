@@ -139,14 +139,17 @@ MIDDLEWARE = DEFAULT_MIDDLEWARE + THIRD_PARTY_MIDDLEWARE + LOCAL_MIDDLEWARE
 # Database django connection settings (https://docs.djangoproject.com/en/3.2/ref/databases) # noqa
 DATABASES = {
     'default': dj_database_url.parse(
-        DATABASE_URL,
+        url=os.environ.get(
+            'DATABASE_URL',
+            'postgres://postgres:postgres@127.0.0.1:5432/postgres'
+        ),
         engine='django-postgreconnect',
         conn_max_age=int(
             os.environ.get('DATABASE_DEFAULT_CONN_MAX_AGE', '600')
         ),
         ssl_require=bool(
             strtobool(
-                os.getenv('DATABASE_DEFAULT_SSL_REQUIRE', 'True')
+                os.getenv('DATABASE_DEFAULT_SSL_REQUIRE', 'False')
             )
         )
     )
@@ -156,15 +159,13 @@ DATABASES = {
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Redis connection settings (https://github.com/jazzband/django-redis)
-REDIS_URL = os.environ.get(
-    'REDIS_URL',
-    'redis://127.0.0.1:6379/1'
-).split(';')
-
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': REDIS_URL,
+        'LOCATION': os.environ.get(
+            'REDIS_URL_DEFAULT',
+            'redis://127.0.0.1:6379/0'
+        ).split(';'),
         'KEY_PREFIX': 'default',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
@@ -176,7 +177,10 @@ CACHES = {
     },
     'concurrent': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': REDIS_URL,
+        'LOCATION': os.environ.get(
+            'REDIS_URL_LOCATION',
+            'redis://127.0.0.1:6379/0'
+        ).split(';'),
         'KEY_PREFIX': 'concurrent',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',

@@ -3,7 +3,6 @@ from django.db import IntegrityError
 import pytest
 from model_bakery import baker
 
-from marketplace.apps.clients.models import Client
 from marketplace.apps.favorites.models import Favorite
 
 
@@ -13,7 +12,7 @@ class TestFavoriteModel:
     @pytest.fixture
     def client_model(self):
         yield baker.make(
-            Client,
+            'Client',
             name='Carlos Eduardo',
             last_name='Dorneles',
             email='test@email.com'
@@ -22,7 +21,7 @@ class TestFavoriteModel:
     @pytest.fixture
     def favorite_model(self, client_model):
         yield baker.make(
-            Favorite,
+            'Favorite',
             client=client_model,
             product_id='6a512e6c-6627-d286-5d18-583558359ab6',
         )
@@ -37,7 +36,7 @@ class TestFavoriteModel:
     ):
         with pytest.raises(IntegrityError):
             baker.make(
-                Favorite,
+                'Favorite',
                 client=client_model,
                 product_id='6a512e6c-6627-d286-5d18-583558359ab6',
             )

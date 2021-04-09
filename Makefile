@@ -11,6 +11,12 @@ endif
 export DJANGO_SETTINGS_MODULE=$(settings)
 
 
+commands-django:
+	@echo "To see the available Django commands, run the following command at the root of the project:"
+	@echo
+	@echo "python manage.py"
+	@echo
+
 clean: ## clean local environment
 	@find . -name "*.pyc" | xargs rm -rf
 	@find . -name "*.pyo" | xargs rm -rf
@@ -43,31 +49,6 @@ app:  ## creates a new django application Ex.: make app name=products
 	@echo 'You should now add application to settings in LOCAL_APPS'
 
 
-docker-run:
-	docker-compose -f docker-compose.yml up -d --build
-
-docker-down:
-	docker-compose -f docker-compose.yml down
-
-docker-downclear:
-	docker-compose -f docker-compose.yml down -v
-
-docker-migrate:
-	docker-compose -f docker-compose.yml exec web python manage.py migrate --noinput
-
-docker-flush:
-	docker-compose -f docker-compose.yml exec web python manage.py flush --noinput
-
-docker-superuser:
-	docker-compose -f docker-compose.yml exec web python manage.py createsuperuser
-
-docker-shell:
-	docker-compose -f docker-compose.yml exec web python manage.py shell -i ipython
-
-docker-logs:
-	docker-compose -f docker-compose.yml logs
-
-
 run: collectstatic  ## run the django project
 	@echo 'Loading application with settings = $(settings)'
 	gunicorn -b 0.0.0.0:8000 -t 300 marketplace.asgi:application -k uvicorn.workers.UvicornWorker --reload
@@ -84,12 +65,26 @@ migration-empty:  ## creates blank migration file
 migration-detect:  ## detect missing migrations
 	python manage.py makemigrations --dry-run --noinput | grep 'No changes detected' -q || (echo 'Missing migration detected!' && exit 1)
 
+dumpdata:  ## removes all data registered in the database
+	python manage.py dumpdata
+
 urls:  ## run the django project
 	python manage.py show_urls
 
 shell:
 	@echo 'Loading shell with settings = $(settings)'
 	python manage.py shell_plus --ipython  # shell -i ipython
+
+
+docker-up:
+	docker-compose -f docker-compose.yml up -d --build
+
+docker-down:
+	docker-compose -f docker-compose.yml down
+
+docker-downclear:
+	docker-compose -f docker-compose.yml down -v
+
 
 test: clean ## run tests
 	pytest -x
@@ -163,3 +158,5 @@ release-major: ## create major release (1.0.0)
 
 push:
 	git push && git push --tags
+
+.PHONY: clean push test lint app run
