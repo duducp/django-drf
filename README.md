@@ -54,6 +54,8 @@ After that activate virtualenv:
 source venv/bin/activate
 ```
 
+Set the environment variables by cloning the .env-sample file to .env
+
 Now, run the command to install the development dependencies:
 ```shell script
 make dependencies
@@ -111,7 +113,6 @@ See the commands available in the Makefile:
 To deploy to production the following environment variables must be defined:
 ```shell script
 export SIMPLE_SETTINGS=project.settings.production
-export DJANGO_SETTINGS_MODULE=project.settings.production
 export SECRET_KEY="your_key_here"
 export DATABASE_URL="sqlite:///db.sqlite3"
 ```
@@ -137,7 +138,6 @@ Now it's time to set the environment variables in Heroku:
 ```shell script
 heroku config:set DEBUG="False"
 heroku config:set SIMPLE_SETTINGS=project.settings.production
-heroku config:set DJANGO_SETTINGS_MODULE=project.settings.production
 heroku config:set SECRET_KEY="your_key_here"
 ```
 

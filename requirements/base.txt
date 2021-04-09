@@ -20,6 +20,7 @@ luizalabs-django-toolkit==2.2.0
 markdown==3.3.4
 psutil==5.8.0
 psycopg2-binary==2.8.6
+python-dotenv==0.17.0
 requests==2.25.1
 simple-settings==1.0.0
 structlog==21.1.0

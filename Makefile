@@ -1,21 +1,10 @@
 path_project=./project
 path_apps=$(path_project)/apps
-settings=project.settings.development
 
-ifdef SIMPLE_SETTINGS
-	settings=$(SIMPLE_SETTINGS)
-else
-	export SIMPLE_SETTINGS=$(settings)
-endif
-
-export DJANGO_SETTINGS_MODULE=$(settings)
-
-
-commands-django:
-	@echo "To see the available Django commands, run the following command at the root of the project:"
+info:
+	@echo "To see the available Django commands, run the following command at the root of the project: python manage.py"
 	@echo
-	@echo "python manage.py"
-	@echo
+	@echo "For more information read the project Readme."
 
 clean: ## clean local environment
 	@find . -name "*.pyc" | xargs rm -rf
@@ -46,11 +35,8 @@ app:  ## creates a new django application Ex.: make app name=products
 	@echo > $(path_apps)/$(name)/tests/__init__.py
 	rm $(path_apps)/$(name)/tests.py
 
-	@echo 'You should now add application to settings in LOCAL_APPS'
-
 
 run: collectstatic  ## run the django project
-	@echo 'Loading application with settings = $(settings)'
 	gunicorn -b 0.0.0.0:8000 -t 300 project.asgi:application -k uvicorn.workers.UvicornWorker --reload
 
 migrate:  ## apply migrations to the database
@@ -72,7 +58,6 @@ urls:  ## run the django project
 	python manage.py show_urls
 
 shell:
-	@echo 'Loading shell with settings = $(settings)'
 	python manage.py shell_plus --ipython  # shell -i ipython
 
 

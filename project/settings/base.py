@@ -15,7 +15,7 @@ BASE_DIR = os.path.dirname(
 )
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'foo')
+SECRET_KEY = os.getenv('SECRET_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(strtobool(os.getenv('DEBUG', 'False')))
@@ -139,13 +139,13 @@ MIDDLEWARE = DEFAULT_MIDDLEWARE + THIRD_PARTY_MIDDLEWARE + LOCAL_MIDDLEWARE
 # Database django connection settings (https://docs.djangoproject.com/en/3.2/ref/databases) # noqa
 DATABASES = {
     'default': dj_database_url.parse(
-        url=os.environ.get(
+        url=os.getenv(
             'DATABASE_URL',
             'postgres://postgres:postgres@127.0.0.1:5432/postgres'
         ),
         engine='django-postgreconnect',
         conn_max_age=int(
-            os.environ.get('DATABASE_DEFAULT_CONN_MAX_AGE', '600')
+            os.getenv('DATABASE_DEFAULT_CONN_MAX_AGE', '600')
         ),
         ssl_require=bool(
             strtobool(
@@ -162,9 +162,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': os.environ.get(
-            'REDIS_URL_DEFAULT',
-            'redis://127.0.0.1:6379/0'
+        'LOCATION': os.getenv(
+            'REDIS_URL_DEFAULT', 'redis://127.0.0.1:6379/0'
         ).split(';'),
         'KEY_PREFIX': 'default',
         'OPTIONS': {
@@ -177,9 +176,8 @@ CACHES = {
     },
     'concurrent': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': os.environ.get(
-            'REDIS_URL_LOCATION',
-            'redis://127.0.0.1:6379/0'
+        'LOCATION': os.getenv(
+            'REDIS_URL_LOCATION', 'redis://127.0.0.1:6379/0'
         ).split(';'),
         'KEY_PREFIX': 'concurrent',
         'OPTIONS': {
@@ -216,7 +214,7 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.AnonRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': os.environ.get('THROTTLE_RATES_ANON', '50/second'),
+        'anon': os.getenv('THROTTLE_RATES_ANON', '50/second'),
     },
     'EXCEPTION_HANDLER': 'project.exceptions.custom_exception_handler',
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
@@ -312,12 +310,8 @@ DRF_YASG_EXCLUDE_VIEWS = []
 # Configuration of the HealthCheck module (https://django-health-check.readthedocs.io/en/latest) # noqa
 # See the Readme in the Health Check section
 HEALTH_CHECK = {
-    'DISK_USAGE_MAX': int(
-        os.getenv('HEALTH_CHECK_DISK_USAGE_MAX', '90')
-    ),  # percent
-    'MEMORY_MIN': int(
-        os.getenv('HEALTH_CHECK_MEMORY_MIN', '100')
-    ),  # in MB
+    'DISK_USAGE_MAX': int(os.getenv('HEALTH_CHECK_DISK_USAGE_MAX', '90')),
+    'MEMORY_MIN': int(os.getenv('HEALTH_CHECK_MEMORY_MIN', '100')),
 }
 
 # Configuring Django logs (https://docs.djangoproject.com/en/3.2/topics/logging) # noqa
@@ -388,18 +382,15 @@ structlog.configure(
 EXTENSIONS_CONFIG = {
     'challenge': {
         'timeout': float(os.getenv('CHALLENGE_API_TIMEOUT', '2')),
-        'host': os.getenv(
-            'CHALLENGE_API_HOST', 'https://challenge-api.luizalabs.com'
-        ),
+        'host': os.getenv('CHALLENGE_API_HOST', 'https://localhost'),
         'caches': {
             'product': int(
-                os.environ.get('CHALLENGE_API_CACHE_TTL_PRODUCT', '10800')
+                os.getenv('CHALLENGE_API_CACHE_TTL_PRODUCT', '10800')
             )
         },
         'routes': {
             'product': os.getenv(
-                'CHALLENGE_API_ROUTE_PRODUCT',
-                '/api/product/{product_id}/'
+                'CHALLENGE_API_ROUTE_PRODUCT', '/api/product/{product_id}/'
             ),
         },
     }
