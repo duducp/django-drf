@@ -13,7 +13,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     networks:
-      - marketplace_network
+      - project_network
   redis:
     restart: on-failure
     image: redis:latest
@@ -22,12 +22,12 @@ services:
     volumes:
       - redis_data:/data
     networks:
-      - marketplace_network
+      - project_network
 
 volumes:
   postgres_data:
   redis_data:
 
 networks:
-  marketplace_network:
+  project_network:
     driver: bridge

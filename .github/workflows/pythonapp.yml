@@ -6,8 +6,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      SIMPLE_SETTINGS: "marketplace.settings.test"
-      DJANGO_SETTINGS_MODULE: "marketplace.settings.test"
+      SIMPLE_SETTINGS: "project.settings.test"
+      DJANGO_SETTINGS_MODULE: "project.settings.test"
 
     steps:
     - uses: actions/checkout@v2
@@ -34,7 +34,7 @@ jobs:
         sort-requirements requirements/test.txt
         flake8 --show-source .
         pycodestyle --show-source .
-        mypy marketplace/
+        mypy project/
     - name: Safety check
       run: |
         pip install safety
@@ -49,4 +49,4 @@ jobs:
     - name: Coverage
       run: |
         pip install -r requirements/test.txt
-        pytest -x --cov=marketplace/ --cov-fail-under=90
+        pytest -x --cov=project/ --cov-fail-under=90

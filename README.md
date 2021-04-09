@@ -1,6 +1,6 @@
-# Marketplace
+# Project Django + DRF
 
-Project created with **Django** using the command `django-admin startproject marketplace .`
+Project created with **Django** using the command `django-admin startproject project .`
 
 Main dependencies:
 - Django (framework)
@@ -110,8 +110,8 @@ See the commands available in the Makefile:
 
 To deploy to production the following environment variables must be defined:
 ```shell script
-export SIMPLE_SETTINGS=marketplace.settings.production
-export DJANGO_SETTINGS_MODULE=marketplace.settings.production
+export SIMPLE_SETTINGS=project.settings.production
+export DJANGO_SETTINGS_MODULE=project.settings.production
 export SECRET_KEY="your_key_here"
 export DATABASE_URL="sqlite:///db.sqlite3"
 ```
@@ -136,8 +136,8 @@ The next step is to send your project to Heroku with the command
 Now it's time to set the environment variables in Heroku:
 ```shell script
 heroku config:set DEBUG="False"
-heroku config:set SIMPLE_SETTINGS=marketplace.settings.production
-heroku config:set DJANGO_SETTINGS_MODULE=marketplace.settings.production
+heroku config:set SIMPLE_SETTINGS=project.settings.production
+heroku config:set DJANGO_SETTINGS_MODULE=project.settings.production
 heroku config:set SECRET_KEY="your_key_here"
 ```
 
@@ -186,7 +186,7 @@ that Heroku should use.
 
 <a id="create_app"></a>
 ### Create new app
-All new apps are created in the _marketplace/apps_ directory and to create a new
+All new apps are created in the _project/apps_ directory and to create a new
 app you can run the following command:
 ```shell script
 make app name=clients
@@ -247,7 +247,7 @@ version is generated when the contract is changed. By default this application
 is in version 1.0 and you notice this when you make a request by passing
 **/v1** in the url.
 
-In the file `marketplace/urls.py` there is a list of urls called **routers_v1**
+In the file `project/urls.py` there is a list of urls called **routers_v1**
 and in the list **urlpatterns** we include it informing the namespace equal
 to _v1_.
 
@@ -367,7 +367,7 @@ For more information you can consult the [official documentation](https://www.dj
         ├── dev.txt
         ├── prod.txt
         └── test.txt
-    └── marketplace
+    └── project
         ├── __init__.py
         ├── apps
             ├── __init__.py

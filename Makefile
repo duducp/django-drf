@@ -1,6 +1,6 @@
-path_project=./marketplace
+path_project=./project
 path_apps=$(path_project)/apps
-settings=marketplace.settings.development
+settings=project.settings.development
 
 ifdef SIMPLE_SETTINGS
 	settings=$(SIMPLE_SETTINGS)
@@ -51,7 +51,7 @@ app:  ## creates a new django application Ex.: make app name=products
 
 run: collectstatic  ## run the django project
 	@echo 'Loading application with settings = $(settings)'
-	gunicorn -b 0.0.0.0:8000 -t 300 marketplace.asgi:application -k uvicorn.workers.UvicornWorker --reload
+	gunicorn -b 0.0.0.0:8000 -t 300 project.asgi:application -k uvicorn.workers.UvicornWorker --reload
 
 migrate:  ## apply migrations to the database
 	python manage.py migrate
@@ -96,10 +96,10 @@ test-debug: clean ## run tests with pdb
 	pytest -x --pdb
 
 test-coverage: clean ## run tests with coverage
-	pytest -x --cov=marketplace/ --cov-report=term-missing --cov-report=xml
+	pytest -x --cov=project/ --cov-report=term-missing --cov-report=xml
 
 test-coverage-html: clean ## run tests with coverage with html report
-	pytest -x --cov=marketplace/ --cov-report=html:htmlcov
+	pytest -x --cov=project/ --cov-report=html:htmlcov
 
 test-coverage-html-server: test-coverage-html ## run server for view coverage tests
 	cd htmlcov && python -m http.server 8001 --bind 0.0.0.0
@@ -112,7 +112,7 @@ lint: ## run code lint
 	sort-requirements requirements/test.txt
 	flake8 --show-source .
 	pycodestyle --show-source .
-	mypy marketplace/
+	mypy project/
 
 safety-check: ## checks libraries safety
 	safety check -r requirements/base.txt
