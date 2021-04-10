@@ -2,7 +2,10 @@ import re
 
 from django.core.validators import RegexValidator
 
-from project.apps.validators import only_letters_and_space, only_numbers
+from project.apps.helpers.validators import (
+    only_letters_and_space,
+    only_numbers
+)
 
 
 class TestValidators:

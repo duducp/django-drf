@@ -1,5 +1,5 @@
-from project.apps.backends.products.interfaces import Product
-from project.apps.extensions.fake.challenge.products.backend import (
+from project.apps.helpers.backends.products.interfaces import Product
+from project.apps.helpers.extensions.fake.challenge.products.backend import (
     ProductFakeBackend
 )
 

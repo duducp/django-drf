@@ -2,14 +2,14 @@ from unittest.mock import patch
 
 import pytest
 
-from project.apps.contracts import Contract
+from project.apps.helpers.contracts import Contract
 
 
 class TestContracts:
     @pytest.fixture()
     def mock_logger(self):
         with patch(
-            'project.apps.contracts.logger'
+            'project.apps.helpers.contracts.logger'
         ) as mock_logger:
             yield mock_logger
 

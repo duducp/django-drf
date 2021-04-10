@@ -1,4 +1,4 @@
-from project.apps.contracts import Contract
+from project.apps.helpers.contracts import Contract
 
 
 class FavoriteSchema(Contract):

@@ -6,13 +6,15 @@ import responses
 from requests import Timeout
 from simple_settings import settings
 
-from project.apps.extensions.challenge.products.exceptions import (
+from project.apps.helpers.extensions.challenge.products.exceptions import (
     ChallengeProductClientException,
     ChallengeProductException,
     ChallengeProductNotFoundException,
     ChallengeProductTimeoutException
 )
-from project.apps.extensions.challenge.products.http_client import get_product
+from project.apps.helpers.extensions.challenge.products.http_client import (
+    get_product
+)
 
 
 class TestGetProduct:

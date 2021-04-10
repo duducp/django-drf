@@ -1,14 +1,18 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
-from project.apps.backends.products.exceptions import (
+from project.apps.clients.models import Client
+from project.apps.favorites.models import Favorite
+from project.apps.helpers.backends.products.exceptions import (
     ProductException,
     ProductNotFoundException
 )
-from project.apps.backends.products.serializers import ProductSerializer
-from project.apps.clients.models import Client
-from project.apps.extensions.challenge.products.backend import ProductBackend
-from project.apps.favorites.models import Favorite
+from project.apps.helpers.backends.products.serializers import (
+    ProductSerializer
+)
+from project.apps.helpers.extensions.challenge.products.backend import (
+    ProductBackend
+)
 
 
 class FavoriteCreateSerializer(ModelSerializer):

@@ -2,16 +2,18 @@ from unittest.mock import patch
 
 import pytest
 
-from project.apps.backends.products.exceptions import (
+from project.apps.helpers.backends.products.exceptions import (
     ProductClientException,
     ProductException,
     ProductNotFoundException,
     ProductTimeoutException,
     ProductValidationException
 )
-from project.apps.backends.products.interfaces import Product
-from project.apps.extensions.challenge.products.backend import ProductBackend
-from project.apps.extensions.challenge.products.exceptions import (
+from project.apps.helpers.backends.products.interfaces import Product
+from project.apps.helpers.extensions.challenge.products.backend import (
+    ProductBackend
+)
+from project.apps.helpers.extensions.challenge.products.exceptions import (
     ChallengeProductClientException,
     ChallengeProductException,
     ChallengeProductNotFoundException,
@@ -23,7 +25,7 @@ class TestGetProduct:
     @pytest.fixture
     def mock_get_product(self, mock_data_api_product):
         with patch(
-            'project.apps.extensions.challenge.products.backend.'
+            'project.apps.helpers.extensions.challenge.products.backend.'
             'get_product'
         ) as mock:
             mock.return_value = mock_data_api_product

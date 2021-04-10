@@ -1,6 +1,6 @@
 from django.db import models
 
-from project.apps.models import BaseModel
+from project.models import BaseModel
 
 
 class Favorite(BaseModel):

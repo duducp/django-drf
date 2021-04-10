@@ -2,12 +2,14 @@ from django.contrib import admin
 from django.forms import forms
 from django.forms.models import ModelForm
 
-from project.apps.backends.products.exceptions import (
+from project.apps.favorites.models import Favorite
+from project.apps.helpers.backends.products.exceptions import (
     ProductException,
     ProductNotFoundException
 )
-from project.apps.extensions.challenge.products.backend import ProductBackend
-from project.apps.favorites.models import Favorite
+from project.apps.helpers.extensions.challenge.products.backend import (
+    ProductBackend
+)
 
 
 class FavoriteForm(ModelForm):

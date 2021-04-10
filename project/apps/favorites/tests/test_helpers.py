@@ -3,10 +3,12 @@ from unittest.mock import Mock, patch
 import pytest
 from model_bakery import baker
 
-from project.apps.backends.products.exceptions import ProductNotFoundException
-from project.apps.backends.products.interfaces import Product
 from project.apps.favorites.helpers import get_details_products_favorites
 from project.apps.favorites.models import Favorite
+from project.apps.helpers.backends.products.exceptions import (
+    ProductNotFoundException
+)
+from project.apps.helpers.backends.products.interfaces import Product
 
 
 @pytest.mark.django_db

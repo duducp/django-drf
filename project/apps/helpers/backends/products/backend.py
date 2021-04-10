@@ -1,6 +1,6 @@
 import abc
 
-from project.apps.backends.products.interfaces import Product
+from project.apps.helpers.backends.products.interfaces import Product
 
 
 class ProductAbstractBackend(metaclass=abc.ABCMeta):

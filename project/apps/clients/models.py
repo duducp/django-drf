@@ -1,7 +1,7 @@
 from django.db import models
 
-from project.apps.models import BaseModel
-from project.apps.validators import only_letters_and_space
+from project.apps.helpers.validators import only_letters_and_space
+from project.models import BaseModel
 
 
 class Client(BaseModel):

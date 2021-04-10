@@ -6,7 +6,7 @@ import structlog
 from requests import HTTPError, Timeout
 from simple_settings import settings
 
-from project.apps.extensions.challenge.products.exceptions import (
+from project.apps.helpers.extensions.challenge.products.exceptions import (
     ChallengeProductClientException,
     ChallengeProductException,
     ChallengeProductNotFoundException,

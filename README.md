@@ -413,16 +413,16 @@ For more information you can consult the [official documentation](https://www.dj
         ├── __init__.py
         ├── apps
             ├── __init__.py
-            ├── backends
-                 └── __init__.py
-            ├── extensions
-                 └── __init__.py
-            ├── tests
-                 └── __init__.py
-            ├── validators.py
-            ├── models.py
-            ├── contracts.py
-            └── conftest.py
+            └── helpers
+                ├── backends
+                     └── __init__.py
+                ├── extensions
+                     └── __init__.py
+                ├── tests
+                     └── __init__.py
+                ├── validators.py
+                ├── contracts.py
+                └── conftest.py
         ├── middlewares
             ├── __init__.py
             └── version_header.py
@@ -445,6 +445,7 @@ For more information you can consult the [official documentation](https://www.dj
             └── .gitignore
         ├── statics
             └── .gitignore
+        ├── models.py
         ├── swagger.py
         ├── exceptions.py
         ├── urls.py

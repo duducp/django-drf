@@ -6,23 +6,29 @@ import structlog
 from rest_framework.exceptions import ValidationError
 from simple_settings import settings
 
-from project.apps.backends.products.backend import ProductAbstractBackend
-from project.apps.backends.products.exceptions import (
+from project.apps.helpers.backends.products.backend import (
+    ProductAbstractBackend
+)
+from project.apps.helpers.backends.products.exceptions import (
     ProductClientException,
     ProductException,
     ProductNotFoundException,
     ProductTimeoutException,
     ProductValidationException
 )
-from project.apps.backends.products.interfaces import Product
-from project.apps.backends.products.serializers import ProductSerializer
-from project.apps.extensions.challenge.products.exceptions import (
+from project.apps.helpers.backends.products.interfaces import Product
+from project.apps.helpers.backends.products.serializers import (
+    ProductSerializer
+)
+from project.apps.helpers.extensions.challenge.products.exceptions import (
     ChallengeProductClientException,
     ChallengeProductException,
     ChallengeProductNotFoundException,
     ChallengeProductTimeoutException
 )
-from project.apps.extensions.challenge.products.http_client import get_product
+from project.apps.helpers.extensions.challenge.products.http_client import (
+    get_product
+)
 
 logger = structlog.get_logger(__name__)
 

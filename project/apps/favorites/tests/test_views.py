@@ -3,12 +3,12 @@ from uuid import UUID
 
 import pytest
 
-from project.apps.backends.products.exceptions import (
+from project.apps.favorites.models import Favorite
+from project.apps.favorites.tests.schemas import FavoriteSchema
+from project.apps.helpers.backends.products.exceptions import (
     ProductException,
     ProductNotFoundException
 )
-from project.apps.favorites.models import Favorite
-from project.apps.favorites.tests.schemas import FavoriteSchema
 
 
 @pytest.mark.django_db

@@ -6,7 +6,7 @@ import pytest
 @pytest.fixture
 def mock_logger():
     with patch(
-        'project.apps.extensions.challenge.products.backend.logger'
+        'project.apps.helpers.extensions.challenge.products.backend.logger'
     ) as mock:
         yield mock
 

@@ -4,9 +4,9 @@ import pytest
 from django_toolkit.concurrent.locks import LockActiveError
 from model_bakery import baker
 
-from project.apps.backends.products.exceptions import ProductException
 from project.apps.clients.models import Client
 from project.apps.clients.tests.schemas import ClientSchema
+from project.apps.helpers.backends.products.exceptions import ProductException
 
 
 @pytest.mark.django_db

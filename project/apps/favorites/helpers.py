@@ -2,9 +2,13 @@ from typing import Dict, List
 
 import structlog
 
-from project.apps.backends.products.exceptions import ProductNotFoundException
-from project.apps.extensions.challenge.products.backend import ProductBackend
 from project.apps.favorites.models import Favorite
+from project.apps.helpers.backends.products.exceptions import (
+    ProductNotFoundException
+)
+from project.apps.helpers.extensions.challenge.products.backend import (
+    ProductBackend
+)
 
 logger = structlog.get_logger(__name__)
 

@@ -10,7 +10,6 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from project.apps.backends.products.exceptions import ProductException
 from project.apps.clients.exceptions import (
     ClientNotFound,
     ClientProductFavoritesException,
@@ -27,6 +26,7 @@ from project.apps.clients.serializers import (
 from project.apps.favorites.helpers import get_details_products_favorites
 from project.apps.favorites.models import Favorite
 from project.apps.favorites.serializers import FavoriteDetailSerializer
+from project.apps.helpers.backends.products.exceptions import ProductException
 from project.exceptions import Conflict
 
 logger = structlog.get_logger(__name__)

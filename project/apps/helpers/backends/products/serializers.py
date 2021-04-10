@@ -2,7 +2,7 @@ import structlog
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from project.apps.backends.products.interfaces import Product
+from project.apps.helpers.backends.products.interfaces import Product
 
 logger = structlog.get_logger(__name__)
 
