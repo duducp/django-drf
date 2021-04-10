@@ -9,6 +9,9 @@ from simple_settings import settings
 from project.exceptions import custom_handler_404
 from project.swagger import schema_view
 
+admin.site.site_header = settings.ADMIN_SITE_HEADER
+admin.site.site_title = settings.ADMIN_SITE_TITLE
+
 handler404 = custom_handler_404
 
 auth: List = [

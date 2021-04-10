@@ -16,7 +16,7 @@ BASE_DIR = os.path.dirname(
 )
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', '')
+SECRET_KEY = os.getenv('SECRET_KEY', '65145e56-8c4f-4434-b451-6e0e3214640e')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(strtobool(os.getenv('DEBUG', 'False')))
@@ -32,6 +32,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'medias')
 MEDIA_URL = '/medias/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/statics/'
+
+ADMIN_URL = 'admin/'
+ADMIN_ENABLED = strtobool(os.getenv('ADMIN_ENABLED', 'true'))
+ADMIN_SITE_HEADER = 'Django Administration'
+ADMIN_SITE_TITLE = 'Project Django + DRF'
 
 LOGIN_URL = reverse_lazy('admin:login')
 LOGOUT_URL = reverse_lazy('admin:logout')
@@ -89,7 +94,6 @@ TEMPLATES = [
 
 # Django apps settings
 DEFAULT_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -97,6 +101,8 @@ DEFAULT_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
 ]
+if ADMIN_ENABLED:
+    DEFAULT_APPS.append('django.contrib.admin')
 
 THIRD_PARTY_APPS = [
     'cid.apps.CidAppConfig',
