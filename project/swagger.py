@@ -10,6 +10,8 @@ schema_view = get_schema_view(
         description="""
         To make a request on a protected route, you must inform the header **Authorization** with the obtained token. Ex.: `Authorization: Bearer TOKEN`.
 
+        To define the language of the text that the API will return, simply inform the header **Accept-Language**. Ex.: `Accept-Language: pt-br`.
+
         The header **Accept** can also be informed in the request to define the type of data to be returned. Today, only `application/xml` and` application/json` are supported.
         You can also enter the query string **format** with the value of **json** or **xml**. Ex.: /?format=json
 

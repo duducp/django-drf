@@ -4,6 +4,7 @@ from datetime import timedelta
 from distutils.util import strtobool
 
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 
 import dj_database_url
 import structlog as structlog
@@ -40,7 +41,11 @@ TIME_ZONE = 'UTC'
 USE_TZ = True
 USE_L10N = True
 USE_I18N = False
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
+LANGUAGES = [
+    ('pt-br', _('LANGUAGE_PORTUGUESE_BRAZIL')),
+    ('en', _('LANGUAGE_ENGLISH')),
+]
 
 # Configurations of the django-cid module responsible for generating correlation_id of logs and requests (https://github.com/Polyconseil/django-cid) # noqa
 CID_GENERATE = True

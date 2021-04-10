@@ -34,6 +34,8 @@ Compatibility:
 - [Renderer and parser data](#renderer)
 - [Application route versioning](#app_route_versioning)
 - [Application code versioning](#app_versioning)
+- [Internationalization](#internationalization)
+- [Logs](#logs)
 - [Correlation ID](#correlation_id)
 - [Throttles](#throttles)
 - [Project structure](#structure)
@@ -262,7 +264,7 @@ create new versions, you must inform them in that parameter.
 
 <a id="app_versioning"></a>
 ### Application code versioning
-As a good practice it is always good to create a _changelog_ file in each
+A good practice it is always good to create a _changelog_ file in each
 completed task in order to keep a history of the change. For that we have some
 commands:
 
@@ -301,6 +303,46 @@ commits, a specific tag for the application version is also generated.
 Finally, you can submit all changes to your git repository with the `make push`
 command.
 
+<a id="internationalization"></a>
+### Internationalization
+This application is configured to use the internationalization that Django
+offers and is fully compatible with the Rest Framework.
+
+By default, internationalization is disabled in this project and to activate
+it you must set the value **True** in the variable `USE_I18N` located in
+`project/settings/base.py`.
+
+The `project/locale` directory is where the files with the translations are
+located. Files with the extension **.po** are used to write the texts in the
+specific language.
+
+Django identifies that a text in the application must be consulted in the
+translation files as follows:
+```
+from django.utils.translation import gettext_lazy as _
+
+default_detail = _('CLIENT_NOT_FOUND')
+```
+
+Note that we use a keyword inside __()_. This keyword will be automatically
+inserted in the translation files when we run the command:
+```
+python manage.py makemessages -l en -l pt_BR
+```
+
+In order to test the translation we need to compile the translation files with
+the following command:
+```
+python manage.py compilemessages
+```
+
+Django identifies which translation to use in some ways that you can see in
+this [link](https://www.django-rest-framework.org/topics/internationalization/#how-the-language-is-determined) .
+
+The best case to use is passing in the requests, the header **Accept-Language**
+with the language code. Ex .: `Accept-Language: pt-br`
+
+<a id="logs"></a>
 ### Logs
 The application logs are more powerful and less painful with the help of
 **structlog** which is intermediated by `structlog`. All logs made are
