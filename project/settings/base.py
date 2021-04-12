@@ -120,7 +120,12 @@ THIRD_PARTY_APPS = [
     'health_check.contrib.psutil',
 ]
 
-INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS
+LOCAL_APPS = [
+    'project.apps.clients.apps.ClientsConfig',
+    'project.apps.favorites.apps.FavoritesConfig',
+]
+
+INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 # Django middlewares settings
 DEFAULT_MIDDLEWARE = [

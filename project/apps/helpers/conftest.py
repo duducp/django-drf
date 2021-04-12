@@ -1,5 +1,3 @@
-from django.contrib.auth.models import User
-
 import pytest
 from model_bakery import baker
 from rest_framework.test import APIClient
@@ -8,7 +6,7 @@ from rest_framework.test import APIClient
 @pytest.fixture
 def user_model():
     yield baker.make(
-        User,
+        'User',
         username='duducp'
     )
 

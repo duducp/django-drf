@@ -45,7 +45,7 @@ class TestClientCreateView:
         data_post
     ):
         baker.make(
-            'clients.Client',
+            'Client',
             email='test@email.com'
         )
 
@@ -103,7 +103,7 @@ class TestClientListView:
         client_authenticated,
     ):
         baker.make(
-            'clients.Client',
+            'Client',
             _quantity=20
         )
 
@@ -356,7 +356,7 @@ class TestClientDestroyView:
         client_model,
     ):
         baker.make(
-            'favorites.Favorite',
+            'Favorite',
             client=client_model,
             product_id='eaefc867-10a6-3a5e-947d-43a984964fcf'
         )
@@ -408,7 +408,7 @@ class TestClientFavoritesDetailView:
     @pytest.fixture()
     def favorite_model(self, client_model):
         yield baker.make(
-            'favorites.Favorite',
+            'Favorite',
             client=client_model,
             product_id='1bf0f365-fbdd-4e21-9786-da459d78dd1f'
         )

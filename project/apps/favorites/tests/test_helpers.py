@@ -38,14 +38,14 @@ class TestGetDetailsProductsFavorites:
     @pytest.fixture()
     def client_model(self):
         yield baker.make(
-            'clients.Client',
+            'Client',
             email='test@email.com'
         )
 
     @pytest.fixture()
     def favorite_model(self, client_model):
         yield baker.make(
-            'favorites.Favorite',
+            'Favorite',
             client=client_model,
             product_id='6a512e6c-6627-d286-5d18-583558359ab6',
             id='ff31f647-f872-4e70-b886-fd3071cd2788'

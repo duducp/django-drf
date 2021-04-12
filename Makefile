@@ -25,16 +25,9 @@ collectstatic: ## creates static files for admin
 	python manage.py collectstatic --clear --noinput
 
 app:  ## creates a new django application Ex.: make app name=products
-	cd $(path_apps) && python ../../manage.py startapp $(name)
-
-	@echo "# Create your exceptions here." > $(path_apps)/$(name)/exceptions.py
-	@echo "from rest_framework import routers\n\nrouter = routers.DefaultRouter(trailing_slash=True)\n\nurlpatterns = router.urls\n" > $(path_apps)/$(name)/urls.py
-	@echo "from rest_framework.serializers import ModelSerializer\n\n# Create your serializers here." > $(path_apps)/$(name)/serializers.py
-
-	cd $(path_apps)/$(name) && mkdir -p tests
-	@echo > $(path_apps)/$(name)/tests/__init__.py
-	rm $(path_apps)/$(name)/tests.py
-
+	cd $(path_apps) && python ../../manage.py startapp --template=../../.template_django/app_name.zip -e py -e md $(name)
+	@echo 'Application created in "$(path_apps)/$(name)"'
+	@echo 'Read the readme for more details: $(path_apps)/$(name)/Readme.md'
 
 run: collectstatic  ## run the django project
 	gunicorn -b 0.0.0.0:8000 -t 300 project.asgi:application -k uvicorn.workers.UvicornWorker --reload

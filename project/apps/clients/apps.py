@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class ClientsConfig(AppConfig):
-    name = 'clients'
+    name = 'project.apps.clients'
     verbose_name = 'Clients'
