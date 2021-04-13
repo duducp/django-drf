@@ -22,8 +22,12 @@ clean: ## clean local environment
 	@rm -f coverage.xml
 	@rm -f *.log
 
+pre-commit:
+	pre-commit install
+
 dependencies: ## install development dependencies
 	pip install -U -r src/requirements/dev.txt
+	pre-commit install
 
 superuser: ## creates superuser for admin
 	python src/manage.py createsuperuser
@@ -144,4 +148,4 @@ release-major: ## create major release (1.0.0)
 push:
 	git push && git push --tags
 
-.PHONY: clean push test lint app run
+.PHONY: clean push test lint app run pre-commit

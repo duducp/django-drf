@@ -40,11 +40,7 @@ jobs:
         safety check -r src/requirements/prod.txt
         safety check -r src/requirements/dev.txt
         safety check -r src/requirements/test.txt
-    - name: Test
+    - name: Test and Coverage
       run: |
         pip install -r src/requirements/test.txt
-        pytest -x
-    - name: Coverage
-      run: |
-        pip install -r src/requirements/test.txt
-        pytest -x --cov=src/project/ --cov-fail-under=90
+        pytest -x --cov=src/project/ --cov-fail-under=95
