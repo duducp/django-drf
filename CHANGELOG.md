@@ -1,3 +1,10 @@
+2.0.0 (2021-04-13)
+Features
+--------
+
+- Refactoring the location of project files
+
+
 1.1.2 (2021-04-05)
 ==================
 
