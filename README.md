@@ -1,6 +1,4 @@
-# Project Django + DRF
-
-Project created with **Django** using the command `django-admin startproject project .`
+# Django + DRF
 
 Main dependencies:
 - Django (framework)
@@ -42,9 +40,9 @@ Compatibility:
 - [Images](#images)
 
 <a id="development_mode"></a>
-## Development mode
+### Development mode
 
-The development mode by default uses sqlite3 as a database and for cache uses LocMemCache.
+The development mode by default uses Postgres as a database and for cache uses Redis.
 
 First, you must configure the virtual environment:
 ```shell script
@@ -56,30 +54,30 @@ After that activate virtualenv:
 source venv/bin/activate
 ```
 
-Set the environment variables by cloning the .env-sample file to .env
+Set the environment variables by cloning the **.env-sample** file to **.env**
 
-Now, run the command to install the development dependencies:
+Run the command to install the development dependencies:
 ```shell script
 make dependencies
 ```
+
+Run the command to start the Postgres and Redis docker instances:
+```shell script
+make docker-up
+```
+
+To remove them without losing the recorded data, perform **make docker-down**
+or **make docker-downclear** to remove and clear the data.
 
 Now, run the command to create the tables in the database:
 ```shell script
 make migrate
 ```
 
-Attention: to execute this command you have to have an instance of postgres running.
-To make it easier you can use the `make docker-up` command.
-
 To access the admin it is necessary to create the superuser. This can be done
 with the following command:
 ```shell script
 make superuser
-```
-
-Finally, we execute the command below to create the static files:
-```shell script
-make collectstatic
 ```
 
 To see which routes exist in the application, execute the command:
@@ -96,6 +94,8 @@ After running the command above, you can access the documentation and the admini
 ```
 http://localhost:8000/v1/docs
 http://localhost:8000/admin
+http://localhost:8000/ping
+http://localhost:8000/healthcheck/?format=json
 ```
 
 <a id="docker"></a>
@@ -110,11 +110,11 @@ See the commands available in the Makefile:
 - make **docker-downclear**: Will remove all containers, networks and volumes from the docker for the project.
 
 <a id="deploying_prod"></a>
-## Deploying application in production
+### Deploying application in production
 
 To deploy to production the following environment variables must be defined:
 ```shell script
-export SIMPLE_SETTINGS=project.settings.production
+export SIMPLE_SETTINGS=project.core.settings.production
 export SECRET_KEY="your_key_here"
 export DATABASE_URL="sqlite:///db.sqlite3"
 ```
@@ -125,9 +125,10 @@ export ALLOWED_HOSTS="*;"
 ```
 
 <a id="deploying_heroku"></a>
-### Deploying on Heroku
+### Deploying on Heroku (does not work with internationalization)
 I am assuming that you already know [Heroku](https://dashboard.heroku.com/apps)
-and that you have already installed the CLI and logged in.
+and that you have already installed the [CLI](https://devcenter.heroku.com/articles/heroku-cli)
+and logged in.
 
 The first thing to do is to create the app on Heroku and this can be done with
 the command `heroku create <name-app>`. After creating the app, the CLI itself
@@ -139,7 +140,7 @@ The next step is to send your project to Heroku with the command
 Now it's time to set the environment variables in Heroku:
 ```shell script
 heroku config:set DEBUG="False"
-heroku config:set SIMPLE_SETTINGS=project.settings.production
+heroku config:set SIMPLE_SETTINGS=project.core.settings.production
 heroku config:set SECRET_KEY="your_key_here"
 ```
 
@@ -168,7 +169,7 @@ make superuser
 The first command we are accessing Heroku's bash and the second we are using to
 create the super user.
 
-Others commands:
+Other commands:
 - **heroku config** view application environment variables
 - **heroku logs --tail** view application logs
 - **heroku addons** view installed addons
@@ -188,7 +189,7 @@ that Heroku should use.
 
 <a id="create_app"></a>
 ### Create new app
-All new apps are created in the _project/apps_ directory and to create a new
+All new apps are created in the _src/project_ directory and to create a new
 app you can run the following command:
 ```shell script
 make app name=clients
@@ -310,9 +311,9 @@ offers and is fully compatible with the Rest Framework.
 
 By default, internationalization is disabled in this project and to activate
 it you must set the value **True** in the variable `USE_I18N` located in
-`project/settings/base.py`.
+`project/core/settings/base.py`.
 
-The `project/locale` directory is where the files with the translations are
+The `project/core/locales` directory is where the files with the translations are
 located. Files with the extension **.po** are used to write the texts in the
 specific language.
 
@@ -327,13 +328,13 @@ default_detail = _('CLIENT_NOT_FOUND')
 Note that we use a keyword inside __()_. This keyword will be automatically
 inserted in the translation files when we run the command:
 ```
-python manage.py makemessages -l en -l pt_BR
+python src/manage.py makemessages -l en -l pt_BR
 ```
 
 In order to test the translation we need to compile the translation files with
 the following command:
 ```
-python manage.py compilemessages
+python src/manage.py compilemessages
 ```
 
 Django identifies which translation to use in some ways that you can see in
@@ -382,8 +383,8 @@ For more information you can consult the [official documentation](https://www.dj
 
 ```
 .
-└── project
-    ├── manage.py
+└── root
+    ├── .env-sample
     ├── runtime.txt
     ├── requirements.txt
     ├── setup.cpf
@@ -391,7 +392,6 @@ For more information you can consult the [official documentation](https://www.dj
     ├── README.md
     ├── Procfile
     ├── Makefile
-    ├── Dockerfile
     ├── docker-compose.yml
     ├── pyproject.toml
     ├── towncrier_template.rst
@@ -403,54 +403,62 @@ For more information you can consult the [official documentation](https://www.dj
         └── .gitignore
     ├── medias
         └── .gitignore
-    ├── requirements
+    ├── .template
+        └── app_name.zip
+    ├── .github
+        └── workflows
+            └── pythonapp.yml
+    └── src
         ├── __init__.py
-        ├── base.txt
-        ├── dev.txt
-        ├── prod.txt
-        └── test.txt
-    └── project
-        ├── __init__.py
-        ├── apps
+        ├── manage.py
+        ├── requirements
             ├── __init__.py
-            └── helpers
-                ├── backends
-                     └── __init__.py
-                ├── extensions
-                     └── __init__.py
-                ├── tests
-                     └── __init__.py
-                ├── validators.py
-                ├── contracts.py
-                └── conftest.py
-        ├── middlewares
+            ├── base.txt
+            ├── dev.txt
+            ├── prod.txt
+            └── test.txt
+        └── project
             ├── __init__.py
-            └── version_header.py
-        ├── throttles
-            └── __init__.py
-        ├── logging
-            ├── __init__.py
-            ├── filters.py
-            └── processors.py
-        ├── settings
-            ├── __init__.py
-            ├── base.py
-            ├── development.py
-            ├── production.py
-            ├── sandbox.py
-            └── test.py
-        ├── locales
-            └── .gitignore
-        ├── templates
-            └── .gitignore
-        ├── statics
-            └── .gitignore
-        ├── models.py
-        ├── swagger.py
-        ├── exceptions.py
-        ├── urls.py
-        ├── wsgi.py
-        └── asgi.py
+            ├── urls.py
+            ├── conftest.py
+            ├── backends
+                └── __init__.py
+            ├── extensions
+                 └── __init__.py
+            ├── helpers
+                 ├── __init__.py
+                 ├── contracts.py
+                 ├── validators.py
+                 └── tests
+                    └── __init__.py
+            └── core
+                ├── middlewares
+                    ├── __init__.py
+                    └── version_header.py
+                ├── throttles
+                    └── __init__.py
+                ├── logging
+                    ├── __init__.py
+                    ├── filters.py
+                    └── processors.py
+                ├── settings
+                    ├── __init__.py
+                    ├── base.py
+                    ├── development.py
+                    ├── production.py
+                    ├── sandbox.py
+                    └── test.py
+                ├── locales
+                    └── .gitignore
+                ├── templates
+                    └── .gitignore
+                ├── statics
+                    └── .gitignore
+                ├── models.py
+                ├── swagger.py
+                ├── exceptions.py
+                ├── wsgi.py
+                └── asgi.py
 ```
 
 

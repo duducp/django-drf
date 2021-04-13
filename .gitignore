@@ -8,6 +8,7 @@ __pycache__/
 # Project
 staticfiles/
 .env
+.env.*
 
 # C extensions
 *.so

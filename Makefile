@@ -1,16 +1,15 @@
-path_project=./project
-path_apps=$(path_project)/apps
+path_project=./src/project
 
 ifneq (,$(wildcard ./.env))
     include .env
     export
 else
-	export SIMPLE_SETTINGS=project.settings.development
-	export DJANGO_SETTINGS_MODULE=project.settings.development
+	export SIMPLE_SETTINGS=project.core.settings.development
+	export DJANGO_SETTINGS_MODULE=project.core.settings.development
 endif
 
 info:
-	@echo "To see the available Django commands, run the following command at the root of the project: python manage.py"
+	@echo "To see the available Django commands, run the following command at the root of the project: python src/manage.py"
 	@echo
 	@echo "For more information read the project Readme."
 
@@ -24,42 +23,42 @@ clean: ## clean local environment
 	@rm -f *.log
 
 dependencies: ## install development dependencies
-	pip install -U -r requirements/dev.txt
+	pip install -U -r src/requirements/dev.txt
 
 superuser: ## creates superuser for admin
-	python manage.py createsuperuser
+	python src/manage.py createsuperuser
 
 collectstatic: ## creates static files for admin
-	python manage.py collectstatic --clear --noinput
+	python src/manage.py collectstatic --clear --noinput
 
 app:  ## creates a new django application Ex.: make app name=products
-	cd $(path_apps) && python ../../manage.py startapp --template=../../.template_django/app_name.zip -e py -e md $(name)
-	@echo 'Application created in "$(path_apps)/$(name)"'
-	@echo 'Read the readme for more details: $(path_apps)/$(name)/Readme.md'
+	cd $(path_project) && python ../manage.py startapp --template=../../.template/app_name.zip -e py -e md $(name)
+	@echo 'Application created in "$(path_project)/$(name)"'
+	@echo 'Read the readme for more details: $(path_project)/$(name)/Readme.md'
 
 run: collectstatic  ## run the django project
-	gunicorn -b 0.0.0.0:8000 -t 300 project.asgi:application -k uvicorn.workers.UvicornWorker --reload
+	gunicorn -b 0.0.0.0:8000 -t 300 project.core.asgi:application -k uvicorn.workers.UvicornWorker --reload
 
 migrate:  ## apply migrations to the database
-	python manage.py migrate
+	python src/manage.py migrate
 
 migration:  ## creates migration file according to the models
-	python manage.py makemigrations
+	python src/manage.py makemigrations
 
 migration-empty:  ## creates blank migration file
-	python manage.py makemigrations --empty $(app)
+	python src/manage.py makemigrations --empty $(app)
 
 migration-detect:  ## detect missing migrations
-	python manage.py makemigrations --dry-run --noinput | grep 'No changes detected' -q || (echo 'Missing migration detected!' && exit 1)
+	python src/manage.py makemigrations --dry-run --noinput | grep 'No changes detected' -q || (echo 'Missing migration detected!' && exit 1)
 
 dumpdata:  ## removes all data registered in the database
-	python manage.py dumpdata
+	python src/manage.py dumpdata
 
 urls:  ## run the django project
-	python manage.py show_urls
+	python src/manage.py show_urls
 
 shell:
-	python manage.py shell_plus --ipython  # shell -i ipython
+	python src/manage.py shell_plus --ipython  # shell -i ipython
 
 
 docker-up:
@@ -82,29 +81,29 @@ test-debug: clean ## run tests with pdb
 	pytest -x --pdb
 
 test-coverage: clean ## run tests with coverage
-	pytest -x --cov=project/ --cov-report=term-missing --cov-report=xml
+	pytest -x --cov=src/project/ --cov-report=term-missing --cov-report=xml
 
 test-coverage-html: clean ## run tests with coverage with html report
-	pytest -x --cov=project/ --cov-report=html:htmlcov
+	pytest -x --cov=src/project/ --cov-report=html:htmlcov
 
 test-coverage-html-server: test-coverage-html ## run server for view coverage tests
 	cd htmlcov && python -m http.server 8001 --bind 0.0.0.0
 
 lint: ## run code lint
 	isort .
-	sort-requirements requirements/base.txt
-	sort-requirements requirements/prod.txt
-	sort-requirements requirements/dev.txt
-	sort-requirements requirements/test.txt
+	sort-requirements src/requirements/base.txt
+	sort-requirements src/requirements/prod.txt
+	sort-requirements src/requirements/dev.txt
+	sort-requirements src/requirements/test.txt
 	flake8 --show-source .
 	pycodestyle --show-source .
-	mypy project/
+	mypy src/project/
 
 safety-check: ## checks libraries safety
-	safety check -r requirements/base.txt
-	safety check -r requirements/prod.txt
-	safety check -r requirements/dev.txt
-	safety check -r requirements/test.txt
+	safety check -r src/requirements/base.txt
+	safety check -r src/requirements/prod.txt
+	safety check -r src/requirements/dev.txt
+	safety check -r src/requirements/test.txt
 
 changelog-feature:  ## signifying a new feature
 	@echo $(message) > changelog/$(filename).feature

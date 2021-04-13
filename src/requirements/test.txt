@@ -1,0 +1,10 @@
+freezegun==1.1.0
+jsonschema==3.2.0
+model_bakery==1.2.1
+pytest==6.2.3
+pytest-assume==2.4.2
+pytest-cov==2.11.1
+pytest-django==4.2.0
+pytest-env==0.6.2
+pytest-simple-settings==0.1.5
+responses==0.13.2
