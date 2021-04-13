@@ -1,6 +1,14 @@
 path_project=./project
 path_apps=$(path_project)/apps
 
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+else
+	export SIMPLE_SETTINGS=project.settings.development
+	export DJANGO_SETTINGS_MODULE=project.settings.development
+endif
+
 info:
 	@echo "To see the available Django commands, run the following command at the root of the project: python manage.py"
 	@echo
